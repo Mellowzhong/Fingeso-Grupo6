@@ -1,7 +1,7 @@
-<template>
-  <UserInfo />
-</template>
-
 <script setup>
-import UserInfo from './User/Views/UserInfo.vue'
+import Header from './common/components/Header.vue';
 </script>
+
+<template>
+  <Header />
+</template>
