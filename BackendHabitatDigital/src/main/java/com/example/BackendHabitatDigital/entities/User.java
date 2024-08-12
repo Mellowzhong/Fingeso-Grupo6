@@ -9,4 +9,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
+    public String name;
+    public String email;
+    private String password;
+    private int contactNumber;
 }
