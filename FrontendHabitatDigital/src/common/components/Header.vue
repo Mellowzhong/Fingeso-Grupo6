@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from 'vue';
 import AccountAuthModal from './AccountAuthModal.vue';
+import router from '../../Router/Router';
 
 const isAccountAuthModalOpen = ref(false);
 
 const handleIsAccountAuthModalOpen = () => {
     isAccountAuthModalOpen.value = !isAccountAuthModalOpen.value;
+}
+
+const redirect = () => {
+    router.push({ name: 'UserInfo' });
 }
 </script>
 
@@ -26,7 +31,12 @@ const handleIsAccountAuthModalOpen = () => {
                 <button class="material-symbols-rounded">notifications</button>
                 <button @click="handleIsAccountAuthModalOpen" class="material-symbols-rounded">account_circle</button>
             </div>
+            <div>
+                <button @click.prevent="redirect()">
+                    user
+                </button>
+            </div>
         </nav>
-        <AccountAuthModal v-model:isOpen="isAccountAuthModalOpen" v-model:onClose="handleIsAccountAuthModalOpen"/>
+        <AccountAuthModal v-model:isOpen="isAccountAuthModalOpen" v-model:onClose="handleIsAccountAuthModalOpen" />
     </header>
 </template>
