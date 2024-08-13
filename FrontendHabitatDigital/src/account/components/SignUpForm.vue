@@ -20,7 +20,9 @@ const roles = [
 
 const signUp = async () => {
     console.log(user.value)
-    const response = await postUser(user.value);
+    const user_copy = { ...user.value }
+    user_copy.phone_number = '+56' + user_copy.phone_number
+    const response = await postUser(user_copy);
     if (response.success == true) {
         console.log('Usuario creado con éxito')
     } else {
@@ -31,38 +33,39 @@ const signUp = async () => {
 </script>
 
 <template>
-    <form action="" class="flex flex-col space-y-4 pt-4" @click.prevent="signUp()">
+    <form action="" class="flex flex-col space-y-4 pt-4" v-on:submit.prevent="signUp">
         <label for="">
             <p class="text-sm ml-2 mb-1">Correo Electrónico:</p>
             <input type="email" name="email" placeholder="Ingrese su correo" required
-                class="w-full border rounded-lg px-2 py-1">
+                class="w-full border rounded-lg px-2 py-1" v-model="user.email">
         </label>
         <label for="">
             <p class="text-sm ml-2 mb-1">Contraseña:</p>
             <input type="password" placeholder="Ingrese su contraseña" required
-                class="w-full border rounded-lg px-2 py-1">
+                class="w-full border rounded-lg px-2 py-1" v-model="user.password">
         </label>
         <div class="flex gap-4">
             <label for="">
                 <p class="text-sm ml-2 mb-1">Nombre:</p>
-                <input type="text" placeholder="Ingrese su nombre" required class="w-full border rounded-lg px-2 py-1">
+                <input type="text" placeholder="Ingrese su nombre" required class="w-full border rounded-lg px-2 py-1"
+                    v-model="user.firstName">
             </label>
             <label for="">
                 <p class="text-sm ml-2 mb-1">Apellido:</p>
-                <input type="text" placeholder="Ingrese su apellido" required
-                    class="w-full border rounded-lg px-2 py-1">
+                <input type="text" placeholder="Ingrese su apellido" required class="w-full border rounded-lg px-2 py-1"
+                    v-model="user.lastName">
             </label>
         </div>
         <label for="">
             <p class="text-sm ml-2 mb-1">Fecha de nacimiento:</p>
-            <input type="date" required class="w-full border rounded-lg px-2 py-1">
+            <input type="date" required class="w-full border rounded-lg px-2 py-1" v-model="user.birthdate">
         </label>
         <label for="">
             <p class="text-sm ml-2 mb-1">Numero de telefono:</p>
             <div class="flex">
                 <span class="bg-teal-200 rounded-l-lg px-2 py-1">+56</span>
                 <input type="tel" name="" id="" pattern="[0-9]{9}" placeholder="Ingrese su número de teléfono" required
-                    class="w-full border rounded-r-lg pl-2 py-1">
+                    class="w-full border rounded-r-lg pl-2 py-1" v-model="user.phone_number">
             </div>
         </label>
         <label for="">
