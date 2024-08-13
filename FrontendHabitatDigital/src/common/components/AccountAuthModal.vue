@@ -22,7 +22,8 @@ const handleFormChange = () => {
 </script>
 
 <template>
-    <aside v-show="isOpen" @click="onClose" class="bg-black bg-opacity-50 fixed inset-0 z-50 flex justify-center items-center">
+    <aside v-show="isOpen" @click="onClose"
+        class="bg-black bg-opacity-50 fixed inset-0 z-50 flex justify-center items-center">
         <section @click.stop class="bg-white w-96 p-4 rounded-2xl">
             <header class="relative flex justify-center">
                 <button v-show="!isLoginForm" @click="handleFormChange" class="absolute left-0 grid">
@@ -33,9 +34,10 @@ const handleFormChange = () => {
                     <span class="material-symbols-rounded">close</span>
                 </button>
             </header>
+
             <body>
-                <LoginForm v-if="isLoginForm"/>
-                <SignUpForm v-else/>
+                <LoginForm v-if="isLoginForm" v-model:onClose="props.onClose" />
+                <SignUpForm v-else />
             </body>
             <footer v-show="isLoginForm" class="flex flex-col pt-4">
                 <p class="text-xs text-center mb-1">¿todavia no tienes una cuenta?</p>
