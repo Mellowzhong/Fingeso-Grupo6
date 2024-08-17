@@ -27,8 +27,19 @@ public class UserService {
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final PasswordEncoder passwordEncoder;
+    
+    // Crear un usuario
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
 
-    public List<UserEntity> getUsers() {
+    // Encontrar un usuario segun su email
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    // Retorna todos los usuarios en la base de datos
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -108,4 +119,5 @@ public class UserService {
             throw new Exception(e.getMessage());
         }
     }
+
 }
