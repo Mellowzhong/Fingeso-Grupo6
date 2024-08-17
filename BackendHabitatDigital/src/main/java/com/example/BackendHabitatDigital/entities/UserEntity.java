@@ -38,7 +38,6 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private Integer contact;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
