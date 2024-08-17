@@ -49,7 +49,6 @@ public class AuthService {
                         .role(RoleEntity.EXTERNAL)
                         .profile(savedProfile)
                         .build();
-
                 userRepository.save(user);
 
                 return AuthResponse.builder()

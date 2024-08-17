@@ -19,6 +19,7 @@ public class ProfileEntity {
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstname;
 
     private String lastname;
