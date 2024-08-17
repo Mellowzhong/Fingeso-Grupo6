@@ -1,11 +1,13 @@
 package com.example.BackendHabitatDigital.services;
 
+import com.example.BackendHabitatDigital.entities.OwnerEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.jwt.JwtAuthenticationFilter;
 import com.example.BackendHabitatDigital.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

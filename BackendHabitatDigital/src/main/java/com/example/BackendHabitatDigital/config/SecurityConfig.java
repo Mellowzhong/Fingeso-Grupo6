@@ -29,6 +29,7 @@ public class SecurityConfig {
                         authRequest
                                 .requestMatchers("/auth/**","/security/**").permitAll()
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                                .requestMatchers("/user/**").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(sessionManager ->
                         sessionManager

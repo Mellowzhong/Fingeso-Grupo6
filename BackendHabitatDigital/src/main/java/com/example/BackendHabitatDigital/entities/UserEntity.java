@@ -18,7 +18,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "usuario")
 public class UserEntity implements UserDetails {
     @Id
     @Column(name = "id", unique = true, nullable = false)

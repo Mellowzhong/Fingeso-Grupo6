@@ -27,14 +27,14 @@ public class InmuebleService {
         this.userRepository = userRepository;
         this.ownerRepository = ownerRepository;
     }
-
+/*
     // Function to add a product
     public ResponseEntity<InmuebleEntity> addProduct(InmuebleEntity inmueble, String userEmail) {
         Optional<UserEntity> user = userRepository.findByEmail(userEmail);
 
         if (user.isPresent()) {
             OwnerEntity owner = new OwnerEntity();
-            owner.setUser(user.get());
+            owner.SetUser(user.get());
 
             // Save the owner entity before setting it to inmueble
             owner = ownerRepository.save(owner);
@@ -46,7 +46,7 @@ public class InmuebleService {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
+*/
     // Function to get all products
     public List<InmuebleEntity> getAllInmuebles() {
         return this.inmuebleRepository.findAll();

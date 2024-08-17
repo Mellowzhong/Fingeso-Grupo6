@@ -27,4 +27,6 @@ public class UserController {
     public Optional<UserEntity> findUserByEmail(@PathVariable String email) {
         return userService.findByEmail(email);
     }
+
+
 }
