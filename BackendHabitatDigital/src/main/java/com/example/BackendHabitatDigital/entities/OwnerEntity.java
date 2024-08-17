@@ -1,6 +1,7 @@
 package com.example.BackendHabitatDigital.entities;
 
 
+import com.example.BackendHabitatDigital.repositories.OwnerRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "owner")
-public class OwnerEntity {
+public class OwnerEntity{
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 }

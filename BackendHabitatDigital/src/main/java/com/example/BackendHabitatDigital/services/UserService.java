@@ -29,17 +29,17 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     
     // Crear un usuario
-    public User createUser(User user) {
+    public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }
 
     // Encontrar un usuario segun su email
-    public User findByEmail(String email) {
+    public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     // Retorna todos los usuarios en la base de datos
-    public List<User> getAllUsers() {
+    public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 

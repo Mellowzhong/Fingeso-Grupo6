@@ -1,10 +1,11 @@
 package com.example.BackendHabitatDigital.controllers;
 
-import com.example.BackendHabitatDigital.entities.User;
+import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -23,7 +24,7 @@ public class UserController {
 
     // Encontrar usuario segun su correo
     @GetMapping("/{email}")
-    public User findUserByEmail(@PathVariable String email) {
+    public Optional<UserEntity> findUserByEmail(@PathVariable String email) {
         return userService.findByEmail(email);
     }
 }
