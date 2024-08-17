@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Data
@@ -30,6 +31,9 @@ public class UserEntity implements UserDetails {
     @OneToOne
     @JoinColumn(name = "profileId")
     private ProfileEntity profile;
+
+    @Column
+    private String email;
 
     @Column(nullable = false)
     private String password;

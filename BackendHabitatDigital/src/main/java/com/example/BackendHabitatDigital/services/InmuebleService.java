@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -47,18 +48,18 @@ public class InmuebleService {
     }
 
     // Function to get all products
-    public List<Inmueble> getAllInmuebles() {
+    public List<InmuebleEntity> getAllInmuebles() {
         return this.inmuebleRepository.findAll();
     }
 
-    public List<Inmueble> getAllInmueblesByOwner(long userId) {
-        Optional<Owner> owner = ownerRepository.findById(userId);
-        Optional<List<Inmueble>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
+    public List<InmuebleEntity> getAllInmueblesByOwner(long userId) {
+        Optional<OwnerEntity> owner = ownerRepository.findById(userId);
+        Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
         return inmuebles.get();
 
     }
 
-    public Optional<Inmueble> getInmuebleById(long productId) {
+    public Optional<InmuebleEntity> getInmuebleById(long productId) {
         return this.inmuebleRepository.findById(productId);
     }
 
