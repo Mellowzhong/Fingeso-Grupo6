@@ -36,10 +36,6 @@ public class ProfileService {
         return profileRepository.findAll();
     }
 
-    public Optional<ProfileEntity> getProfileByEmail(String email) {
-        return profileRepository.findByEmail(email);
-    }
-
     public Optional<ProfileEntity> getProfileById(Long id) {
         return profileRepository.findById(id);
     }
@@ -70,10 +66,6 @@ public class ProfileService {
 
         if (profile.getLastname() != null) {
             existingProfile.setLastname(profile.getLastname());
-        }
-
-        if (profile.getEmail() != null) {
-            existingProfile.setEmail(profile.getEmail());
         }
 
         if (profile.getContact() != null) {

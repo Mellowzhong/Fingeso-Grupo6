@@ -32,9 +32,6 @@ public class UserEntity implements UserDetails {
     @JoinColumn(name = "profileId")
     private ProfileEntity profile;
 
-    @Column
-    private String email;
-
     @Column(nullable = false)
     private String password;
 

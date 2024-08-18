@@ -9,8 +9,11 @@ const props = defineProps({
     }
 });
 
-const email = ref('');
-const password = ref('');
+const user = ref({
+    email: '',
+    password: '',
+})
+
 
 const showPassword = ref(false);
 
@@ -19,8 +22,8 @@ const handleShowPassword = () => {
 }
 
 const login = async () => {
-    console.log("login", email.value, password.value);
-    const response = await getUser(email.value, password.value);
+    console.log("login", user.value);
+    const response = await getUser(user.value);
     if (response.success == true) {
         console.log('Usuario logueado con éxito')
         props.onClose();
@@ -36,7 +39,7 @@ const login = async () => {
             <p class="text-sm ml-2 mb-1">Correo Electrónico:</p>
             <div class="flex">
                 <input type="email" placeholder="Ingrese su correo" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="email">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.email">
                 <span class="material-symbols-rounded border rounded-r-lg p-1">mail</span>
             </div>
         </label>
@@ -46,7 +49,7 @@ const login = async () => {
                 <input v-if="showPassword" type="text" placeholder="Ingrese su contraseña" required
                     class="w-full border rounded-l-lg pl-2 py-1" v-model="password">
                 <input v-else type="password" placeholder="Ingrese su contraseña" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="password">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.password">
 
                 <span class="material-symbols-rounded border rounded-r-lg p-1">lock</span>
             </div>

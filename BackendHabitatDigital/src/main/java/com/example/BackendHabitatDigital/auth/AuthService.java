@@ -37,7 +37,6 @@ public class AuthService {
                 ProfileEntity profile = ProfileEntity.builder()
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
-                        .email(request.getEmail())
                         .contact(request.getContact())
                         .build();
 
