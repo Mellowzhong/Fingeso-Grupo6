@@ -1,5 +1,7 @@
 package com.example.BackendHabitatDigital.auth;
 
+import com.example.BackendHabitatDigital.Requests.LoginRequest;
+import com.example.BackendHabitatDigital.Requests.RegisterRequest;
 import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
@@ -63,10 +65,10 @@ public class AuthService {
     }
 
     private boolean isAdmittedPassword(String password) {
-        return true;
+        return password.length() >= 3;
     }
 
     private boolean isAdmittedUsername(String username) {
-        return true;
+        return !userRepository.existsByUsername(username);
     }
 }

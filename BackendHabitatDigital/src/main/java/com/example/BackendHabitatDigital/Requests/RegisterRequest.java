@@ -1,4 +1,4 @@
-package com.example.BackendHabitatDigital.auth;
+package com.example.BackendHabitatDigital.Requests;
 
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import jakarta.persistence.Column;

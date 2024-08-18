@@ -1,4 +1,4 @@
-package com.example.BackendHabitatDigital.Controllers;
+package com.example.BackendHabitatDigital.controllers;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

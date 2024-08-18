@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class InmuebleService {
+
     private final InmuebleRepository inmuebleRepository;
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
@@ -27,14 +28,14 @@ public class InmuebleService {
         this.userRepository = userRepository;
         this.ownerRepository = ownerRepository;
     }
-/*
+
     // Function to add a product
     public ResponseEntity<InmuebleEntity> addProduct(InmuebleEntity inmueble, String userEmail) {
-        Optional<UserEntity> user = userRepository.findByEmail(userEmail);
+        Optional<UserEntity> user = userRepository.findByUsername(userEmail);
 
         if (user.isPresent()) {
             OwnerEntity owner = new OwnerEntity();
-            owner.SetUser(user.get());
+            owner.setUser(user.get());
 
             // Save the owner entity before setting it to inmueble
             owner = ownerRepository.save(owner);
@@ -46,17 +47,10 @@ public class InmuebleService {
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-*/
+
     // Function to get all products
     public List<InmuebleEntity> getAllInmuebles() {
         return this.inmuebleRepository.findAll();
-    }
-
-    public List<InmuebleEntity> getAllInmueblesByOwner(long userId) {
-        Optional<OwnerEntity> owner = ownerRepository.findById(userId);
-        Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
-        return inmuebles.get();
-
     }
 
     public Optional<InmuebleEntity> getInmuebleById(long productId) {
