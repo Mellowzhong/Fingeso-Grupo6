@@ -21,4 +21,9 @@ public class UserController {
     public UserEntity createUser(@RequestBody UserEntity user) {
         return userService.createUser(user);
     }
+
+    @GetMapping("/get/{userEmail}")
+    public UserEntity getUser(@PathVariable String userEmail) {
+        return userService.getUserByUsername(userEmail);
+    }
 }

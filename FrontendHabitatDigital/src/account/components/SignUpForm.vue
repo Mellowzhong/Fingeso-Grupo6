@@ -1,20 +1,17 @@
 <script setup>
 import { ref } from 'vue';
-import { postUser } from '../services/UserServices';
+import { register } from '../services/UserServices';
 import { useCookies } from 'vue3-cookies';
 import { ACCESS_TOKEN } from '../../utilities/constants/constants';
 
 const { cookies } = useCookies();
 
 const user = ref({
-    username: 'mellow',
-    email: '',
+    username: '',
     password: '',
     firstName: '',
     lastName: '',
-    // birthdate: '',
     contact: '',
-    // role: '',
 })
 
 const roles = [
@@ -27,7 +24,7 @@ const signUp = async () => {
     const user_copy = { ...user.value }
     user_copy.contact = '+56' + user_copy.contact
     console.log(user_copy)
-    const response = await postUser(user_copy);
+    const response = await register(user_copy);
     if (response.success == true) {
         console.log(response.data)
         cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
@@ -44,7 +41,7 @@ const signUp = async () => {
         <label for="">
             <p class="text-sm ml-2 mb-1">Correo Electrónico:</p>
             <input type="email" name="email" placeholder="Ingrese su correo" required
-                class="w-full border rounded-lg px-2 py-1" v-model="user.email">
+                class="w-full border rounded-lg px-2 py-1" v-model="user.username">
         </label>
         <label for="">
             <p class="text-sm ml-2 mb-1">Contraseña:</p>
@@ -63,10 +60,6 @@ const signUp = async () => {
                     v-model="user.lastName">
             </label>
         </div>
-        <!-- <label for="">
-            <p class="text-sm ml-2 mb-1">Fecha de nacimiento:</p>
-            <input type="date" required class="w-full border rounded-lg px-2 py-1" v-model="user.birthdate">
-        </label> -->
         <label for="">
             <p class="text-sm ml-2 mb-1">Numero de telefono:</p>
             <div class="flex">
