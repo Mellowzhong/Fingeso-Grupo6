@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { getUser } from '../services/UserServices';
+import { login, getUsuarioByEmail } from '../services/UserServices';
+import { useStore } from 'vuex';
+import VueJwtDecode from 'vue-jwt-decode';
 
 const props = defineProps({
     onClose: {
@@ -9,8 +11,10 @@ const props = defineProps({
     }
 });
 
+const store = useStore();
+
 const user = ref({
-    email: '',
+    username: '',
     password: '',
 })
 
@@ -21,11 +25,17 @@ const handleShowPassword = () => {
     showPassword.value = !showPassword.value;
 }
 
-const login = async () => {
+const loginUser = async () => {
     console.log("login", user.value);
-    const response = await getUser(user.value);
+    const response = await login(user.value);
     if (response.success == true) {
         console.log('Usuario logueado con éxito')
+        console.log(response.data)
+        const decodedToken = VueJwtDecode.decode(response.data.token);
+        console.log(decodedToken)
+        const getterUsuario = await getUsuarioByEmail(decodedToken.sub);
+        console.log(getterUsuario.data)
+        store.commit('setUsuario', getterUsuario.data);
         props.onClose();
     } else {
         console.log('Error al loguear usuario')
@@ -34,12 +44,12 @@ const login = async () => {
 </script>
 
 <template>
-    <form action="" class="flex flex-col border-b-2 space-y-4 py-4" v-on:submit.prevent="login">
+    <form action="" class="flex flex-col border-b-2 space-y-4 py-4" v-on:submit.prevent="loginUser">
         <label for="">
             <p class="text-sm ml-2 mb-1">Correo Electrónico:</p>
             <div class="flex">
                 <input type="email" placeholder="Ingrese su correo" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.email">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.username">
                 <span class="material-symbols-rounded border rounded-r-lg p-1">mail</span>
             </div>
         </label>

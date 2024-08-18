@@ -29,7 +29,7 @@ const handleIsAccountAuthModalOpen = () => {
             <div class="flex items-center space-x-4">
                 <button class="material-symbols-rounded">notifications</button>
                 <button @click="handleIsAccountAuthModalOpen" class="material-symbols-rounded">account_circle</button>
-                <span v-if="!usuario.firstName"> {{ usuario.firstName }} </span>
+                <span v-if="usuario"> {{ usuario.profile.firstname }} </span>
             </div>
         </nav>
         <AccountAuthModal v-model:isOpen="isAccountAuthModalOpen" v-model:onClose="handleIsAccountAuthModalOpen" />

@@ -49,8 +49,8 @@ public class UserService {
         return userRepository.findByProfileId(id);
     }
 
-    public Optional<UserEntity> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserEntity getUserByUsername(String username) {
+        return userRepository.findByUsername(username).get();
     }
 
     public Optional<UserEntity> getUserById(Long id) {

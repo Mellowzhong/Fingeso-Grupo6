@@ -40,6 +40,7 @@ public class AuthService {
                         .contact(request.getContact())
                         .build();
 
+                System.out.println(profile);
                 ProfileEntity savedProfile = profileRepository.save(profile);
 
                 UserEntity user = UserEntity.builder()

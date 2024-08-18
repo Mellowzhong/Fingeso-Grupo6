@@ -5,7 +5,7 @@ import { useCookies } from "vue3-cookies";
 const { cookies } = useCookies();
 
 const api = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: "http://localhost:8080",
 });
 
 api.interceptors.request.use(
@@ -15,7 +15,7 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(config);
+    console.log(config.headers);
     return config;
   },
   (error) => {
