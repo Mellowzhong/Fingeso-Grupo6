@@ -1,12 +1,13 @@
 <script setup>
 import Header from './common/components/Header.vue';
-import Home from './common/components/Home.vue';
+import PropertyInfo from './property/views/PropertyInfo.vue';
 import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <section class="nav">
+  <section class="h-screen flex flex-col">
     <Header />
     <RouterView />
+    
   </section>
 </template>
