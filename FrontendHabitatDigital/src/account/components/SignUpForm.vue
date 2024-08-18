@@ -1,15 +1,20 @@
 <script setup>
 import { ref } from 'vue';
 import { postUser } from '../services/UserServices';
+import { useCookies } from 'vue3-cookies';
+import { ACCESS_TOKEN } from '../../utilities/constants/constants';
+
+const { cookies } = useCookies();
 
 const user = ref({
+    username: 'mellow',
     email: '',
     password: '',
     firstName: '',
     lastName: '',
-    birthdate: '',
-    phone_number: '',
-    role: '',
+    // birthdate: '',
+    contact: '',
+    // role: '',
 })
 
 const roles = [
@@ -19,11 +24,13 @@ const roles = [
 ]
 
 const signUp = async () => {
-    console.log(user.value)
     const user_copy = { ...user.value }
-    user_copy.phone_number = '+56' + user_copy.phone_number
+    user_copy.contact = '+56' + user_copy.contact
+    console.log(user_copy)
     const response = await postUser(user_copy);
     if (response.success == true) {
+        console.log(response.data)
+        cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
         console.log('Usuario creado con éxito')
     } else {
         console.log('Error al crear usuario')
@@ -56,19 +63,19 @@ const signUp = async () => {
                     v-model="user.lastName">
             </label>
         </div>
-        <label for="">
+        <!-- <label for="">
             <p class="text-sm ml-2 mb-1">Fecha de nacimiento:</p>
             <input type="date" required class="w-full border rounded-lg px-2 py-1" v-model="user.birthdate">
-        </label>
+        </label> -->
         <label for="">
             <p class="text-sm ml-2 mb-1">Numero de telefono:</p>
             <div class="flex">
                 <span class="bg-teal-200 rounded-l-lg px-2 py-1">+56</span>
                 <input type="tel" name="" id="" pattern="[0-9]{9}" placeholder="Ingrese su número de teléfono" required
-                    class="w-full border rounded-r-lg pl-2 py-1" v-model="user.phone_number">
+                    class="w-full border rounded-r-lg pl-2 py-1" v-model="user.contact">
             </div>
         </label>
-        <label for="">
+        <!-- <label for="">
             <p class="text-sm ml-2 mb-1">Rol:</p>
             <div class="flex justify-between px-2">
                 <div v-for="role in roles" class="">
@@ -76,7 +83,7 @@ const signUp = async () => {
                     {{ role.name }}
                 </div>
             </div>
-        </label>
+        </label> -->
         <button class="bg-teal-400 p-1 rounded">Registrarse</button>
     </form>
 </template>

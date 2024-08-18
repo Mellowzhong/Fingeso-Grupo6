@@ -36,9 +36,9 @@ public class UserService {
     }
 
     // Encontrar un usuario segun su email
-    public Optional<UserEntity> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
+//    public Optional<UserEntity> findByEmail(String email) {
+//        return userRepository.findByEmail(email);
+//    }
 
     // Retorna todos los usuarios en la base de datos
     public List<UserEntity> getAllUsers() {

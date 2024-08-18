@@ -24,11 +24,5 @@ public class ProfileEntity {
 
     private String lastname;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    private Integer contact;
-
-    @Column(columnDefinition="bytea")
-    private byte[] picture;
+    private String contact;
 }
