@@ -26,4 +26,9 @@ public class UserController {
     public UserEntity getUser(@PathVariable String userEmail) {
         return userService.getUserByUsername(userEmail);
     }
+
+    @PutMapping("/update")
+    public UserEntity updateUser(@RequestBody UserEntity user) {
+        return userService.updateUser(user);
+    }
 }

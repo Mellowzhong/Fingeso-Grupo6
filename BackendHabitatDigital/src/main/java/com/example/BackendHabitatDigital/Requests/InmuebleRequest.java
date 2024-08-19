@@ -7,23 +7,23 @@ import java.util.List;
 @Data
 public class InmuebleRequest {
     //user
-    private String email;
+    private String userEmail;
 
     //product
-    private Boolean venta;
-    private int monto;
-    private String direccion;
-    private String tipo;
-    private int numero_habitaciones;
-    private int numero_banos;
-    private int metros_cuadrados;
-    private int ano_construccion;
-    private String estado_propiedad;
-    private String descripcion;
-    private String servicios_cercanos;
-    private Boolean estacionamiento;
-    private Boolean amoblado;
-    private Boolean aprobacion;
-    private List<String> imagenes;
+    private Boolean sale;
+    private int price;
+    private String direction;
+    private String type;
+    private int rooms;
+    private int bathrooms;
+    private int squareMeters;
+    private int yearConstruction;
+    private String state;
+    private String description;
+    private String services;
+    private Boolean parking;
+    private Boolean furnished;
+    private Boolean aprobated;
+    private List<String> photos;
     private String corredorEmail;
 }
