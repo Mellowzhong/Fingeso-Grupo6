@@ -27,6 +27,16 @@ const roles = [
     { name: 'C. de I.', value: 'property broker' },
 ]
 
+const clearUser = () => {
+    user.value = {
+        username: '',
+        password: '',
+        firstname: '',
+        lastname: '',
+        contact: '',
+    }
+}
+
 const signUp = async () => {
     const user_copy = { ...user.value }
     user_copy.contact = '+56' + user_copy.contact
@@ -36,6 +46,7 @@ const signUp = async () => {
         console.log(response.data);
         cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
         console.log('Usuario creado con éxito');
+        clearUser();
         props.onClose();
     } else {
         console.log('Error al crear usuario');

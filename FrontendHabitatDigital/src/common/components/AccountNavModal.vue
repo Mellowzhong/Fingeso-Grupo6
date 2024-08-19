@@ -1,5 +1,5 @@
 <script setup>
-    import { defineProps } from 'vue';
+    import { defineProps, computed } from 'vue';
     import { useStore } from 'vuex';
     import { RouterLink, useRouter } from 'vue-router';
 
@@ -18,6 +18,10 @@
 
     const router = useRouter();
 
+    const user = computed(() => store.getters.getUsuario);
+
+    const canPublish = computed(() => user.value && (user.value.role === 'OWNER' || user.value.role === 'COMUN'));
+
     const logout = () => {
         document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         router.push('/');
@@ -33,8 +37,9 @@
         <nav class="bg-white w-40 absolute top-16 right-32 rounded-xl p-4">
             <ul class="flex flex-col items-center space-y-2">
                 <li><RouterLink to="/user">Ir a mi perfil</RouterLink></li>
-                <li><RouterLink to="/propertyRegister">Publicar Inmueble</RouterLink></li>
+                <li v-show="canPublish"><RouterLink to="/propertyRegister">Publicar Inmueble</RouterLink></li>
                 <li>Configuración</li>
+                <li>sans</li>
                 <li @click="logout">Cerrar sesión</li>
             </ul>
         </nav>
