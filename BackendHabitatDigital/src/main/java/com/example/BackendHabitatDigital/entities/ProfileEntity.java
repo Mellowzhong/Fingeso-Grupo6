@@ -20,6 +20,8 @@ public class ProfileEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String photo;
+
     private String firstname;
 
     private String lastname;

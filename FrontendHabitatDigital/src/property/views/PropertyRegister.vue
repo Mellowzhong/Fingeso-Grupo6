@@ -34,6 +34,7 @@ const saveProperty = async () => {
     const response = await postProperty(property.value);
 
     if (response.success) {
+        //Actualizar el usuario en el store
         router.push('/');
         console.log('save user same time as property');
     } else {
