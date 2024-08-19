@@ -22,11 +22,8 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    // Encontrar usuario segun su correo
-    @GetMapping("/{email}")
-    public Optional<UserEntity> findUserByEmail(@PathVariable String email) {
-        return userService.findByEmail(email);
+    @GetMapping("/get/{userEmail}")
+    public UserEntity getUser(@PathVariable String userEmail) {
+        return userService.getUserByUsername(userEmail);
     }
-
-
 }

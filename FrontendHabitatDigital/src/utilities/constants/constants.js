@@ -1,5 +1,1 @@
-import axios from "axios";
-
-export const axiosClient = axios.create({
-  baseURL: "http://localhost:8080",
-});
+export const ACCESS_TOKEN = "access_token";

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-import { getUser } from '../services/UserServices';
+import { login, getUsuarioByEmail } from '../services/UserServices';
+import { useStore } from 'vuex';
+import VueJwtDecode from 'vue-jwt-decode';
 
 const props = defineProps({
     onClose: {
@@ -9,8 +11,13 @@ const props = defineProps({
     }
 });
 
-const email = ref('');
-const password = ref('');
+const store = useStore();
+
+const user = ref({
+    username: '',
+    password: '',
+})
+
 
 const showPassword = ref(false);
 
@@ -18,11 +25,17 @@ const handleShowPassword = () => {
     showPassword.value = !showPassword.value;
 }
 
-const login = async () => {
-    console.log("login", email.value, password.value);
-    const response = await getUser(email.value, password.value);
+const loginUser = async () => {
+    console.log("login", user.value);
+    const response = await login(user.value);
     if (response.success == true) {
         console.log('Usuario logueado con éxito')
+        console.log(response.data)
+        const decodedToken = VueJwtDecode.decode(response.data.token);
+        console.log(decodedToken)
+        const getterUsuario = await getUsuarioByEmail(decodedToken.sub);
+        console.log(getterUsuario.data)
+        store.commit('setUsuario', getterUsuario.data);
         props.onClose();
     } else {
         console.log('Error al loguear usuario')
@@ -31,12 +44,12 @@ const login = async () => {
 </script>
 
 <template>
-    <form action="" class="flex flex-col border-b-2 space-y-4 py-4" v-on:submit.prevent="login">
+    <form action="" class="flex flex-col border-b-2 space-y-4 py-4" v-on:submit.prevent="loginUser">
         <label for="">
             <p class="text-sm ml-2 mb-1">Correo Electrónico:</p>
             <div class="flex">
                 <input type="email" placeholder="Ingrese su correo" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="email">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.username">
                 <span class="material-symbols-rounded border rounded-r-lg p-1">mail</span>
             </div>
         </label>
@@ -46,7 +59,7 @@ const login = async () => {
                 <input v-if="showPassword" type="text" placeholder="Ingrese su contraseña" required
                     class="w-full border rounded-l-lg pl-2 py-1" v-model="password">
                 <input v-else type="password" placeholder="Ingrese su contraseña" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="password">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.password">
 
                 <span class="material-symbols-rounded border rounded-r-lg p-1">lock</span>
             </div>

@@ -1,4 +1,4 @@
-package com.example.BackendHabitatDigital.auth;
+package com.example.BackendHabitatDigital.Requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

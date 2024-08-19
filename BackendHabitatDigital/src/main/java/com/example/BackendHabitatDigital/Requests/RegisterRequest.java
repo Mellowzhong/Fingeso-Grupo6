@@ -1,4 +1,4 @@
-package com.example.BackendHabitatDigital.auth;
+package com.example.BackendHabitatDigital.Requests;
 
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import jakarta.persistence.Column;
@@ -16,6 +16,5 @@ public class RegisterRequest {
     String firstname;
     String lastname;
     String password;
-    String email;
-    Integer contact;
+    String contact;
 }

@@ -1,5 +1,7 @@
 package com.example.BackendHabitatDigital.auth;
 
+import com.example.BackendHabitatDigital.Requests.LoginRequest;
+import com.example.BackendHabitatDigital.Requests.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
