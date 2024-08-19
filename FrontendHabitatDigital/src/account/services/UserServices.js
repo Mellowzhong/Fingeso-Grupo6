@@ -44,8 +44,8 @@ export const getUsuarioByEmail = async (email) => {
 
 export const updateUsuario = async (user) => {
   try {
-    console.log(user);
-    const response = await api.put("/user/update", user);
+    console.log(user.profile);
+    const response = await api.put("/profile/", user.profile);
     return { success: true, data: response.data };
   } catch (error) {
     return { success: false, data: error };

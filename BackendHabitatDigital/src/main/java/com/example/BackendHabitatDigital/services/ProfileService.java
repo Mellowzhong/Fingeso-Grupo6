@@ -50,12 +50,16 @@ public class ProfileService {
         ProfileEntity existingProfile = profileRepository.findById(profile.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Profile with id " + profile.getId() + " does not exist."));
 
-        UserEntity existingUser = userService.getUserByProfileId (existingProfile.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User with profile id " + existingProfile.getId() + " does not exist."));
+//        UserEntity existingUser = userService.getUserByProfileId (existingProfile.getId())
+//                .orElseThrow(() -> new EntityNotFoundException("User with profile id " + existingProfile.getId() + " does not exist."));
 
 
         if (profile.getFirstname() != null) {
             existingProfile.setFirstname(profile.getFirstname());
+        }
+
+        if (profile.getPhoto() != null) {
+            existingProfile.setPhoto(profile.getPhoto());
         }
 
         if (profile.getLastname() != null) {

@@ -18,6 +18,9 @@ export default createStore({
     clearUsuario(state) {
       state.usuario = null;
     },
+    clearProfile(state) {
+      state.usuario.profile = null;
+    },
     setProperty(state, property) {
       state.property = property;
     },
@@ -32,8 +35,11 @@ export default createStore({
     clearUsuario({ commit }) {
       commit("clearUsuario");
     },
+    clearProfile({ commit }) {
+      commit("clearUsuario");
+    },
     logoutUser({ commit }) {
-      commit('clearUsuario');
+      commit("clearUsuario");
     },
     selectProperty({ commit }, property) {
       commit("setProperty", property);
