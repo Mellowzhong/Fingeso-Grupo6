@@ -22,7 +22,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Crear usuario
+    // Function to create a User
     @PostMapping
     public UserEntity createUser(@RequestBody UserEntity user) {
         return userService.createUser(user);
@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<UserEntity> updateUser(@RequestBody UserEntity user) {
-        UserEntity newUser = userService.updateUser(user);
-        return  ResponseEntity.ok(newUser);
+    public UserEntity updateUser(@RequestBody UserEntity user) {
+        return userService.updateUser(user);
     }
 }
+

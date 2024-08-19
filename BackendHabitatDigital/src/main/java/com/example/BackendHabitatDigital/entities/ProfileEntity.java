@@ -28,6 +28,8 @@ public class ProfileEntity {
 
     private String contact;
 
-    @Column(columnDefinition="bytea")
-    private byte[] picture;
+    private String description;
+
+    private String profilePic;
+
 }

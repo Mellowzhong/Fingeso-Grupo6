@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,15 +32,10 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     
-    // Crear un usuario
+    // Create user
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }
-
-    // Encontrar un usuario segun su email
-//    public Optional<UserEntity> findByEmail(String email) {
-//        return userRepository.findByEmail(email);
-//    }
 
     // Retorna todos los usuarios en la base de datos
     public List<UserEntity> getAllUsers() {
@@ -62,34 +58,57 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public UserEntity updateUser(UserEntity user) {
+    public UserEntity updateUser(UserEntity updatedUser) {
+        // Get the current authentication information from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("User is not authenticated");
         }
 
-        UserEntity existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " does not exist."));
+        // Get the current username from the authentication context
+        String currentUsername = authentication.getName();
 
-        if (user.getUsername() != null) {
-            existingUser.setUsername(user.getUsername());
+        // Find the existing user by their username
+        UserEntity existingUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + currentUsername + " not found"));
+
+        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
+
+        // Verify that the user is authorized to update this account
+        if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
+            throw new SecurityException("Not authorized to update this user");
         }
 
-        ProfileEntity newProfile = user.getProfile();
-        if (newProfile != null) {
+        // Update if there are changes
+        if (updatedUser.getProfile() != null) {
+            ProfileEntity updatedProfile = updatedUser.getProfile();
             ProfileEntity existingProfile = existingUser.getProfile();
-            if(user.getProfile() != null){
-                existingProfile.setFirstname(newProfile.getFirstname());
-                existingProfile.setLastname(newProfile.getLastname());
-                existingProfile.setContact(newProfile.getContact());
-                existingProfile.setDescription(newProfile.getDescription());
-                existingProfile.setPicture(newProfile.getPicture());
+
+            // Update profile fields
+            if (updatedProfile.getFirstname() != null) {
+                existingProfile.setFirstname(updatedProfile.getFirstname());
             }
+
+            if (updatedProfile.getLastname() != null) {
+                existingProfile.setLastname(updatedProfile.getLastname());
+            }
+
+            if (updatedProfile.getContact() != null) {
+                existingProfile.setContact(updatedProfile.getContact());
+            }
+            if (updatedProfile.getDescription() != null) {
+                existingProfile.setDescription(updatedProfile.getDescription());
+            }
+
+            if (updatedProfile.getProfilePic() != null) {
+                existingProfile.setProfilePic(updatedProfile.getProfilePic());
+            }
+
+            existingUser.setProfile(existingProfile);
         }
 
-        return userRepository.save(existingUser);
-    }
 
     public UserEntity updatePassword(UserEntity user) {
         UserEntity existingUser = userRepository.findById(user.getId())
