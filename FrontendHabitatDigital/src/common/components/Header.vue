@@ -41,6 +41,7 @@ const handleIsAccountAuthModalOpen = () => {
         </nav>
         <AccountAuthModal v-if="!usuario" v-model:isOpen="isAccountAuthModalOpen"
             v-model:onClose="handleIsAccountAuthModalOpen" />
-        <!-- <AccountNavModal v-else /> -->
+        <AccountNavModal v-else v-model:isOpen="isAccountAuthModalOpen"
+        v-model:onClose="handleIsAccountAuthModalOpen"/>
     </header>
 </template>
