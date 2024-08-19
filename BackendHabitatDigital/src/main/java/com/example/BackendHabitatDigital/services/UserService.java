@@ -71,13 +71,6 @@ public class UserService {
         UserEntity existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " does not exist."));
 
-        String currentUsername = authentication.getName();
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
-
-        if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
-            throw new SecurityException("Not authorized to update this user");
-        }
-
         if (user.getUsername() != null) {
             existingUser.setUsername(user.getUsername());
         }
