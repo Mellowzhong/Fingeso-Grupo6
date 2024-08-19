@@ -31,7 +31,7 @@ public class UserService {
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final PasswordEncoder passwordEncoder;
-    
+
     // Create user
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
@@ -109,6 +109,9 @@ public class UserService {
             existingUser.setProfile(existingProfile);
         }
 
+        // Save the updated user entity
+        return userRepository.save(existingUser);
+    }
 
     public UserEntity updatePassword(UserEntity user) {
         UserEntity existingUser = userRepository.findById(user.getId())

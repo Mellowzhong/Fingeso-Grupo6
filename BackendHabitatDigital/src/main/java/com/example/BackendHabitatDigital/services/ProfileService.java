@@ -39,7 +39,7 @@ public class ProfileService {
     public Optional<ProfileEntity> getProfileById(Long id) {
         return profileRepository.findById(id);
     }
-/*
+
     public ProfileEntity updateProfile(ProfileEntity profile) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -70,12 +70,12 @@ public class ProfileService {
             existingProfile.setDescription(profile.getDescription());
         }
 
-        if(profile.getPicture() != null){
-            existingProfile.setPicture(profile.getPicture());
+        if(profile.getProfilePic() != null){
+            existingProfile.setProfilePic(profile.getProfilePic());
         }
 
         return profileRepository.save(existingProfile);
-    } */
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     public boolean deleteProfile(Long id) throws Exception {
