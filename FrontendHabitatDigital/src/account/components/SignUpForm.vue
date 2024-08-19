@@ -4,6 +4,13 @@ import { register } from '../services/UserServices';
 import { useCookies } from 'vue3-cookies';
 import { ACCESS_TOKEN } from '../../utilities/constants/constants';
 
+const props = defineProps({
+    onClose: {
+        type: Function,
+        required: true,
+    }
+});
+
 const { cookies } = useCookies();
 
 const user = ref({
@@ -26,11 +33,12 @@ const signUp = async () => {
     console.log(user_copy)
     const response = await register(user_copy);
     if (response.success == true) {
-        console.log(response.data)
+        console.log(response.data);
         cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
-        console.log('Usuario creado con éxito')
+        console.log('Usuario creado con éxito');
+        props.onClose();
     } else {
-        console.log('Error al crear usuario')
+        console.log('Error al crear usuario');
     }
 }
 

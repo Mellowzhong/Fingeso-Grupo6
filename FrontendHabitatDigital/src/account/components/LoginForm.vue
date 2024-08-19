@@ -57,7 +57,7 @@ const loginUser = async () => {
             <p class="text-sm ml-2 mb-1">Contraseña:</p>
             <div class="flex">
                 <input v-if="showPassword" type="text" placeholder="Ingrese su contraseña" required
-                    class="w-full border rounded-l-lg pl-2 py-1" v-model="password">
+                    class="w-full border rounded-l-lg pl-2 py-1" v-model="user.password">
                 <input v-else type="password" placeholder="Ingrese su contraseña" required
                     class="w-full border rounded-l-lg pl-2 py-1" v-model="user.password">
 

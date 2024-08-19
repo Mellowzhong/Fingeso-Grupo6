@@ -25,6 +25,9 @@ export default createStore({
     clearUsuario({ commit }) {
       commit("clearUsuario");
     },
+    logoutUser({ commit }) {
+      commit('clearUsuario');
+    },
   },
   getters: {
     getUsuario: (state) => state.usuario,
