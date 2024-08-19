@@ -33,6 +33,7 @@
         <nav class="bg-white w-40 absolute top-16 right-32 rounded-xl p-4">
             <ul class="flex flex-col items-center space-y-2">
                 <li><RouterLink to="/user">Ir a mi perfil</RouterLink></li>
+                <li><RouterLink to="/propertyRegister">Publicar Inmueble</RouterLink></li>
                 <li>Configuración</li>
                 <li @click="logout">Cerrar sesión</li>
             </ul>
