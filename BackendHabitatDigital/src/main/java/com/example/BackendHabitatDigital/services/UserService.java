@@ -109,9 +109,6 @@ public class UserService {
             existingUser.setProfile(existingProfile);
         }
 
-        // Save the updated user entity
-        return userRepository.save(existingUser);
-    }
 
     public UserEntity updatePassword(UserEntity user) {
         UserEntity existingUser = userRepository.findById(user.getId())

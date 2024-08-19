@@ -24,9 +24,12 @@ public class ProfileEntity {
 
     private String lastname;
 
+    private String description;
+
     private String contact;
 
     private String description;
 
     private String profilePic;
+
 }

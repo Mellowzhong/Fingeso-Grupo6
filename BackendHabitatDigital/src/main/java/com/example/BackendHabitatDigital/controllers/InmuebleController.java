@@ -34,6 +34,8 @@ public class InmuebleController {
         return inmueble.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
+
     @GetMapping
     public List<InmuebleEntity> getAllInmueble() { return this.inmuebleService.getAllInmuebles();}
 
@@ -60,4 +62,8 @@ public class InmuebleController {
         return this.inmuebleService.deleteInmueble(inmuebleId);
     }
 
+    @GetMapping("/testing/{userId}")
+    public List<InmuebleEntity> getAllInmueblesByOwner(@PathVariable Long userId) {
+        return this.inmuebleService.getAllInmueblesByOwner(userId);
+    }
 }
