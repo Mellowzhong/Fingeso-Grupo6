@@ -4,7 +4,11 @@ import com.example.BackendHabitatDigital.entities.InmuebleEntity;
 import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
 import com.example.BackendHabitatDigital.services.InmuebleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,8 +37,20 @@ public class InmuebleController {
     @GetMapping
     public List<InmuebleEntity> getAllInmueble() { return this.inmuebleService.getAllInmuebles();}
 
-    @PostMapping("/{userEmail}")
-    public ResponseEntity<InmuebleEntity> createInmueble(@RequestBody InmuebleEntity inmueble, @PathVariable String userEmail) {
+    @PostMapping("/add")
+    public ResponseEntity<?> createInmueble(@RequestBody InmuebleEntity inmueble) {
+        // Authenticate
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verify session
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        // Get email
+        String userEmail = authentication.getName();
+
+        // Call to service
         return inmuebleService.addProduct(inmueble, userEmail);
     }
 

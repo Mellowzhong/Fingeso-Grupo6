@@ -3,6 +3,7 @@ package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.InmuebleEntity;
 import com.example.BackendHabitatDigital.entities.OwnerEntity;
+import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
 import com.example.BackendHabitatDigital.repositories.OwnerRepository;
@@ -29,18 +30,22 @@ public class InmuebleService {
         this.ownerRepository = ownerRepository;
     }
 
-    // Function to add a product
+    // Function to add a new product
     public ResponseEntity<InmuebleEntity> addProduct(InmuebleEntity inmueble, String userEmail) {
-        Optional<UserEntity> user = userRepository.findByUsername(userEmail);
+        Optional<UserEntity> userOptional = userRepository.findByUsername(userEmail);
 
-        if (user.isPresent()) {
-            OwnerEntity owner = new OwnerEntity();
-            owner.setUser(user.get());
+        if (userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
 
-            // Save the owner entity before setting it to inmueble
-            owner = ownerRepository.save(owner);
+            // Verify if user has already an associated OwnerEntity
+            OwnerEntity owner = ownerRepository.findByUser(user)
+                    .orElseGet(() -> {
+                        OwnerEntity newOwner = new OwnerEntity();
+                        newOwner.setUser(user);
+                        return ownerRepository.save(newOwner);
+                    });
+
             inmueble.setOwner(owner);
-
             inmuebleRepository.save(inmueble);
             return new ResponseEntity<>(inmueble, HttpStatus.CREATED);
         }

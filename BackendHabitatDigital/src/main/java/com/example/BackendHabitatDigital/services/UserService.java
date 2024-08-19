@@ -1,6 +1,7 @@
 package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.OwnerEntity;
+import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.jwt.JwtAuthenticationFilter;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,15 +32,10 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     
-    // Crear un usuario
+    // Create user
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }
-
-    // Encontrar un usuario segun su email
-//    public Optional<UserEntity> findByEmail(String email) {
-//        return userRepository.findByEmail(email);
-//    }
 
     // Retorna todos los usuarios en la base de datos
     public List<UserEntity> getAllUsers() {
@@ -61,27 +58,58 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    public UserEntity updateUser(UserEntity user) {
+    public UserEntity updateUser(UserEntity updatedUser) {
+        // Get the current authentication information from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("User is not authenticated");
         }
 
-        UserEntity existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " does not exist."));
-
+        // Get the current username from the authentication context
         String currentUsername = authentication.getName();
+
+        // Find the existing user by their username
+        UserEntity existingUser = userRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new UsernameNotFoundException("User with username " + currentUsername + " not found"));
+
         boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
 
+        // Verify that the user is authorized to update this account
         if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
             throw new SecurityException("Not authorized to update this user");
         }
 
-        if (user.getUsername() != null) {
-            existingUser.setUsername(user.getUsername());
+        // Update if there are changes
+        if (updatedUser.getProfile() != null) {
+            ProfileEntity updatedProfile = updatedUser.getProfile();
+            ProfileEntity existingProfile = existingUser.getProfile();
+
+            // Update profile fields
+            if (updatedProfile.getFirstname() != null) {
+                existingProfile.setFirstname(updatedProfile.getFirstname());
+            }
+
+            if (updatedProfile.getLastname() != null) {
+                existingProfile.setLastname(updatedProfile.getLastname());
+            }
+
+            if (updatedProfile.getContact() != null) {
+                existingProfile.setContact(updatedProfile.getContact());
+            }
+            if (updatedProfile.getDescription() != null) {
+                existingProfile.setDescription(updatedProfile.getDescription());
+            }
+
+            if (updatedProfile.getProfilePic() != null) {
+                existingProfile.setProfilePic(updatedProfile.getProfilePic());
+            }
+
+            existingUser.setProfile(existingProfile);
         }
 
+        // Save the updated user entity
         return userRepository.save(existingUser);
     }
 

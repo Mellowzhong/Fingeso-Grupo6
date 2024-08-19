@@ -16,7 +16,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Crear usuario
+    // Function to create a User
     @PostMapping
     public UserEntity createUser(@RequestBody UserEntity user) {
         return userService.createUser(user);
@@ -26,4 +26,10 @@ public class UserController {
     public UserEntity getUser(@PathVariable String userEmail) {
         return userService.getUserByUsername(userEmail);
     }
+
+    @PutMapping("/update")
+    public UserEntity updateUser(@RequestBody UserEntity user) {
+        return userService.updateUser(user);
+    }
 }
+
