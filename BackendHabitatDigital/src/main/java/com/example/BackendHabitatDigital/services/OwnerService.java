@@ -32,7 +32,7 @@ public class OwnerService {
     }
 
     public ResponseEntity<Object> addOwner(InmuebleRequest inmuebleForm) {
-        Optional<UserEntity> optionalUser = userRepository.findByUsername(inmuebleForm.getEmail());
+        Optional<UserEntity> optionalUser = userRepository.findByUsername(inmuebleForm.getUserEmail());
 
         if (optionalUser.isEmpty()){
             return new ResponseEntity<>("no existe el usuario", HttpStatus.BAD_REQUEST);
@@ -44,21 +44,21 @@ public class OwnerService {
 
         InmuebleEntity inmueble = new InmuebleEntity();
 
-        inmueble.setDisponibility(inmuebleForm.getVenta());
-        inmueble.setPrice(inmuebleForm.getMonto());
-        inmueble.setDirection(inmuebleForm.getDireccion());
-        inmueble.setType(inmuebleForm.getTipo());
-        inmueble.setRooms(inmuebleForm.getNumero_habitaciones());
-        inmueble.setBathrooms(inmuebleForm.getNumero_banos());
-        inmueble.setSquareMeters(inmuebleForm.getMetros_cuadrados());
-        inmueble.setYearConstruction(inmuebleForm.getAno_construccion());
-        inmueble.setState(inmuebleForm.getEstado_propiedad());
-        inmueble.setDescription(inmuebleForm.getDescripcion());
-        inmueble.setServices(inmuebleForm.getServicios_cercanos());
-        inmueble.setParking(inmuebleForm.getEstacionamiento());
-        inmueble.setFurnished(inmuebleForm.getAmoblado());
-        inmueble.setAprobated(inmuebleForm.getAprobacion());
-        inmueble.setPhotos(inmuebleForm.getImagenes());
+        inmueble.setDisponibility(inmuebleForm.getSale());
+        inmueble.setPrice(inmuebleForm.getPrice());
+        inmueble.setDirection(inmuebleForm.getDirection());
+        inmueble.setType(inmuebleForm.getType());
+        inmueble.setRooms(inmuebleForm.getRooms());
+        inmueble.setBathrooms(inmuebleForm.getBathrooms());
+        inmueble.setSquareMeters(inmuebleForm.getSquareMeters());
+        inmueble.setYearConstruction(inmuebleForm.getYearConstruction());
+        inmueble.setState(inmuebleForm.getState());
+        inmueble.setDescription(inmuebleForm.getDescription());
+        inmueble.setServices(inmuebleForm.getServices());
+        inmueble.setParking(inmuebleForm.getParking());
+        inmueble.setFurnished(inmuebleForm.getFurnished());
+        inmueble.setAprobated(inmuebleForm.getAprobated());
+        inmueble.setPhotos(inmuebleForm.getPhotos());
 
         if (optionalOwner.isPresent()){
             owner = optionalOwner.get();

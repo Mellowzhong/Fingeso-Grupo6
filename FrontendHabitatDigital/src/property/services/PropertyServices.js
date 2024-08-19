@@ -7,11 +7,21 @@ export const getProperties = async () => {
   } catch (error) {
     return { success: false, data: error };
   }
-}
+};
 
-export const postProperty = async (userEmail, property) => {
+export const postProperty = async (property) => {
   try {
-    const response = await api.post(`/inmueble/${userEmail}`, property);
+    const response = await api.post("/owner", property);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, data: error };
+  }
+};
+
+export const getAllPropertysByOwner = async (userId) => {
+  try {
+    const response = await api.get(`/inmueble/testing/${userId}`);
+    console.log(response.data);
     return { success: true, data: response.data };
   } catch (error) {
     return { success: false, data: error };

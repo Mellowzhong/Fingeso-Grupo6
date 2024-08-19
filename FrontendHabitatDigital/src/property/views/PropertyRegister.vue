@@ -11,6 +11,7 @@ const store = useStore();
 const user = computed(() => store.getters.getUsuario);
 
 const property = ref({
+    userEmail: user.value.username,
     disponibility: false,
     sale: false,
     price: '',
@@ -30,7 +31,7 @@ const property = ref({
 });
 
 const saveProperty = async () => {
-    const response = await postProperty(user.value.username, property.value);
+    const response = await postProperty(property.value);
 
     if (response.success) {
         router.push('/');
