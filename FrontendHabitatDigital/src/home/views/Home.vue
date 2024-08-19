@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { getProperties } from '../../property/services/PropertyServices';
@@ -19,6 +19,8 @@ const getAllProperties = async () => {
     }
 };
 
+const isEmptyProperties = computed(() => properties.value.length === 0);
+
 const selectProperty = (property) => {
     store.dispatch('selectProperty', property);
     console.log(property);
@@ -32,9 +34,13 @@ onMounted(() => {
 
 <template>
     <main class="h-screen mx-32 my-4 p-4">
+        <h2 v-if="isEmptyProperties" class="text-2xl">No existen inmuebles 😢</h2>
         <!-- Product Card -->
-        <div class="grid grid-cols-4 gap-4">
+        <div v-else>
+            <h2 class="text-2xl">Inmuebles</h2>
+            <div class="grid grid-cols-4 gap-4">
             <PropertyCard v-for="property in properties" :key="property.id" :property @click="selectProperty(property)"/>
+        </div>
         </div>
     </main>
 </template>

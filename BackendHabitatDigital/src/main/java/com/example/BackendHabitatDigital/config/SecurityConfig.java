@@ -28,7 +28,7 @@ public class SecurityConfig {
                                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                                 .requestMatchers("/user/**").permitAll()
                                 .requestMatchers("/inmueble/**").permitAll()
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .sessionManagement(sessionManager ->
                         sessionManager
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

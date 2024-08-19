@@ -40,7 +40,6 @@ public class AuthService {
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
                         .contact(request.getContact())
-                        .picture(request.getPicture())
                         .description(request.getDescription())
                         .build();
 
