@@ -1,5 +1,6 @@
 package com.example.BackendHabitatDigital.Requests;
 
+import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
@@ -17,4 +18,6 @@ public class RegisterRequest {
     String lastname;
     String password;
     String contact;
+    byte[] picture;
+    String description;
 }

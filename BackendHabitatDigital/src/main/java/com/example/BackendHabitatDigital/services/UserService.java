@@ -1,6 +1,7 @@
 package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.OwnerEntity;
+import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.jwt.JwtAuthenticationFilter;
@@ -71,15 +72,20 @@ public class UserService {
         UserEntity existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " does not exist."));
 
-        String currentUsername = authentication.getName();
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
-
-        if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
-            throw new SecurityException("Not authorized to update this user");
-        }
-
         if (user.getUsername() != null) {
             existingUser.setUsername(user.getUsername());
+        }
+
+        ProfileEntity newProfile = user.getProfile();
+        if (newProfile != null) {
+            ProfileEntity existingProfile = existingUser.getProfile();
+            if(user.getProfile() != null){
+                existingProfile.setFirstname(newProfile.getFirstname());
+                existingProfile.setLastname(newProfile.getLastname());
+                existingProfile.setContact(newProfile.getContact());
+                existingProfile.setDescription(newProfile.getDescription());
+                existingProfile.setPicture(newProfile.getPicture());
+            }
         }
 
         return userRepository.save(existingUser);
