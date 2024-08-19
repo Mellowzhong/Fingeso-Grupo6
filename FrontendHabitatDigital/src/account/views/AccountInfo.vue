@@ -1,33 +1,40 @@
+<script setup>
+
+</script>
+
 <template>
-    <div class="m-6 grid bg-[rgb(190,187,187)] p-6 rounded-md">
+    <div class="flex flex-col flex-grow h-screen bg-gray-200 rounded-xl mx-32 my-4 p-4">
         <section class="flex items-center">
-            <img class="rounded-full aspect-square object-cover" src="../../Images/Mob 2.png" width="500" height="500"
+            <img class="rounded-full aspect-square object-cover" src="../../Images/Mob 2.png" width="350" height="350"
                 alt="Foto de perfil" />
-            <div class="grid text-center mx-auto">
-                <h2 class="text-9xl">Alonso Sanhueza</h2>
-                <div class="flex justify-center items-center">
-                    <span class="text-8xl text-yellow-400 mr-1">&#9733;</span>
-                    <span class="text-8xl text-yellow-400 mr-1">&#9733;</span>
-                    <span class="text-8xl text-yellow-400 mr-1">&#9733;</span>
-                    <span class="text-8xl text-yellow-400 mr-1">&#9733;</span>
-                    <span class="text-8xl text-yellow-400 mr-1">&#9733;</span>
-                    <span class="text-5xl text-center my-auto ml-6"> 24 años</span>
+            <div class="grid text-center mx-auto space-y-2">
+                <h2 class="text-8xl">Alonso Sanhueza</h2>
+                <div class="flex justify-center items-center space-x-2">
+                    <div class="bg-black bg-opacity-20 flex items-center rounded-xl px-3 py-0.5">
+                        Propietario
+                    </div>
+                    <div class="bg-black bg-opacity-20 flex items-center rounded-xl px-3 py-0.5">
+                        <span class="material-symbols-rounded">hotel_class</span>
+                        5
+                    </div>
+                    <div class="bg-black bg-opacity-20 flex items-center rounded-xl px-3 py-0.5">
+                        <span class="material-symbols-rounded">cake</span>
+                        20 de Septiembre
+                    </div>
                 </div>
             </div>
         </section>
         <section class="mt-8">
-            <h2 class="text-5xl">Descripción</h2>
-            <p class="text-2xl mt-4">Aqui iria la descripcion del corredor de inmuebles</p>
+            <h2 class="text-2xl">Descripción</h2>
+            <p class="mt-4">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Numquam optio, blanditiis corrupti, quidem maxime laudantium voluptatem expedita ex nemo nesciunt, facere minus esse eius. Voluptate rem vero doloribus qui dicta!
+            </p>
         </section>
         <section class="mt-8">
-            <h2 class="text-5xl">Historial de inmuebles:</h2>
+            <h2 class="text-2xl">Historial de inmuebles:</h2>
             <div>
-                <!-- Listado de inmuebles -->
+                
             </div>
         </section>
     </div>
 </template>
-
-<script setup>
-
-</script>

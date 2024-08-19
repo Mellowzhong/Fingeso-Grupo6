@@ -6,13 +6,18 @@ const router = createRouter({
     {
       path: "/",
       name: "HomePage",
-      component: () => import("../common/components/Home.vue"),
+      component: () => import("../home/views/Home.vue"),
     },
     {
       path: "/user",
       name: "UserInfo",
       component: () => import("../account/views/AccountInfo.vue"),
     },
+    {
+      path: "/property",
+      name: "PropertyInfo",
+      component: () => import("../property/views/PropertyInfo.vue"),
+    }
   ],
   linkActiveClass: "active-link",
 });
