@@ -65,9 +65,7 @@ public class InmuebleService {
 
     public List<InmuebleEntity> getAllInmueblesByOwner(long userId) {
         Optional<OwnerEntity> owner = ownerRepository.findById(userId);
-        System.out.println(owner);
         Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
-        System.out.println(inmuebles);
         return inmuebles.get();
 
     }
