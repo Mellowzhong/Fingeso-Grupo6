@@ -17,7 +17,12 @@ const router = createRouter({
       path: "/property",
       name: "PropertyInfo",
       component: () => import("../property/views/PropertyInfo.vue"),
-    }
+    },
+    {
+      path: "/propertyRegister",
+      name: "PropertyRegister",
+      component: () => import("../property/views/PropertyRegister.vue"),
+    },
   ],
   linkActiveClass: "active-link",
 });

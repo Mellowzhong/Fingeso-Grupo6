@@ -9,8 +9,8 @@ const { cookies } = useCookies();
 const user = ref({
     username: '',
     password: '',
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     contact: '',
 })
 
@@ -52,12 +52,12 @@ const signUp = async () => {
             <label for="">
                 <p class="text-sm ml-2 mb-1">Nombre:</p>
                 <input type="text" placeholder="Ingrese su nombre" required class="w-full border rounded-lg px-2 py-1"
-                    v-model="user.firstName">
+                    v-model="user.firstname">
             </label>
             <label for="">
                 <p class="text-sm ml-2 mb-1">Apellido:</p>
                 <input type="text" placeholder="Ingrese su apellido" required class="w-full border rounded-lg px-2 py-1"
-                    v-model="user.lastName">
+                    v-model="user.lastname">
             </label>
         </div>
         <label for="">
