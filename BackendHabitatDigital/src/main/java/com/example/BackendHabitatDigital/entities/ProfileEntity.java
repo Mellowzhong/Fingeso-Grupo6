@@ -30,8 +30,4 @@ public class ProfileEntity {
 
     private String contact;
 
-    private String description;
-
-    private String profilePic;
-
 }

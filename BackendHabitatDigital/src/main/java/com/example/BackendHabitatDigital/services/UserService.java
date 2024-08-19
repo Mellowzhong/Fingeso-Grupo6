@@ -102,13 +102,10 @@ public class UserService {
                 existingProfile.setDescription(updatedProfile.getDescription());
             }
 
-            if (updatedProfile.getProfilePic() != null) {
-                existingProfile.setProfilePic(updatedProfile.getProfilePic());
-            }
-
             existingUser.setProfile(existingProfile);
         }
-
+        return userRepository.save(existingUser);
+    }
 
     public UserEntity updatePassword(UserEntity user) {
         UserEntity existingUser = userRepository.findById(user.getId())
