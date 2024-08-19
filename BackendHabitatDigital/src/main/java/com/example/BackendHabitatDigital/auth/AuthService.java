@@ -40,6 +40,7 @@ public class AuthService {
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
                         .contact(request.getContact())
+                        .description(request.)
                         .build();
 
                 System.out.println(profile);

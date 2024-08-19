@@ -24,5 +24,10 @@ public class ProfileEntity {
 
     private String lastname;
 
+    private String description;
+
     private String contact;
+
+    @Column(columnDefinition="bytea")
+    private byte[] picture;
 }

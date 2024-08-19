@@ -53,12 +53,6 @@ public class ProfileService {
         UserEntity existingUser = userService.getUserByProfileId (existingProfile.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with profile id " + existingProfile.getId() + " does not exist."));
 
-        String currentUsername = authentication.getName();
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
-
-        if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
-            throw new SecurityException("Not authorized to update this user");
-        }
 
         if (profile.getFirstname() != null) {
             existingProfile.setFirstname(profile.getFirstname());
@@ -70,6 +64,14 @@ public class ProfileService {
 
         if (profile.getContact() != null) {
             existingProfile.setContact(profile.getContact());
+        }
+
+        if(profile.getDescription() != null){
+            existingProfile.setDescription(profile.getDescription());
+        }
+
+        if(profile.getPicture() != null){
+            existingProfile.setPicture(profile.getPicture());
         }
 
         return profileRepository.save(existingProfile);
