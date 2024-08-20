@@ -47,22 +47,28 @@ onMounted(async () => {
         <div class="flex flex-grow">
             <figure class="bg-gray-400 w-[40rem] h-[32rem] flex-1 overflow-hidden relative">
                 <!-- Imágenes -->
-                <img v-for="(image, index) in property.photos" :key="index" :src="image"
-                    :alt="`Imagen ${index + 1} de la propiedad`"
-                    class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300"
-                    :class="{ 'opacity-100': index === currentImageIndex, 'opacity-0': index !== currentImageIndex }">
+                <div v-if="property.photos.length === 0">
+                    <img src="../../Images/noImage.png" alt="Imagen de la propiedad"
+                        class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300">
+                </div>
+                <div v-else>
+                    <img v-for="(image, index) in property.photos" :key="index" :src="image"
+                        :alt="`Imagen ${index + 1} de la propiedad`"
+                        class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300"
+                        :class="{ 'opacity-100': index === currentImageIndex, 'opacity-0': index !== currentImageIndex }">
 
-                <!-- Flecha izquierda -->
-                <button v-if="property.photos.length > 1" @click="previousImage"
-                    class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">
-                    &#10094;
-                </button>
+                    <!-- Flecha izquierda -->
+                    <button v-if="property.photos.length > 1" @click="previousImage"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">
+                        &#10094;
+                    </button>
 
-                <!-- Flecha derecha -->
-                <button v-if="property.photos.length > 1" @click="nextImage"
-                    class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">
-                    &#10095;
-                </button>
+                    <!-- Flecha derecha -->
+                    <button v-if="property.photos.length > 1" @click="nextImage"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">
+                        &#10095;
+                    </button>
+                </div>
             </figure>
             <figcaption class="flex-1 p-4 space-y-2">
                 <h1 class="text-4xl">{{ property.type }}</h1>

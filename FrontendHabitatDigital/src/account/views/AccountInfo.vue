@@ -11,6 +11,7 @@ const router = useRouter();
 const store = useStore();
 const user = computed(() => store.getters.getUsuario);
 const showImageInput = ref(false);
+const showDescriptionInput = ref(false);
 const properties = ref([]);
 
 const updateUser = async () => {
@@ -27,8 +28,10 @@ const updateUser = async () => {
         console.log(response.data, 'Usuario update')
         store.dispatch('clearUsuario');
         store.dispatch('setUsuario', newUser);
+        showDescriptionInput.value = false;
     } else {
         console.log('Error al actualizar usuario')
+        showDescriptionInput.value = false;
     }
 }
 
@@ -88,7 +91,7 @@ onMounted(() => {
                         </div>
                     </div>
                     <!-- Add photo button -->
-                    <div v-if="user.profile.photo === null" class="mt-4">
+                    <div class="mt-4">
                         <button @click="showImageInput = !showImageInput"
                             class="bg-blue-500 hover:bg-blue-700 disabled:bg-red-500 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline w-1/2">
                             {{ showImageInput ? 'Cancelar' : 'Agregar imagen' }}
@@ -114,18 +117,29 @@ onMounted(() => {
                 <!-- <div v-if="user.profile.description === null"> -->
                 <div>
                     <h2 class="text-2xl">Descripción</h2>
-                    <label for="Description">
-                        <textarea v-model="user.profile.description" id="description" name="description"
-                            placeholder="Descripción del usuario" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 
-                        rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    </textarea>
-                    </label>
-                    <button @click="updateUser"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r mt-4">
-                        Agregar
-                    </button>
+                    <div  v-if="showDescriptionInput"> 
+                        <label for="Description">
+                            <textarea v-model="user.profile.description" id="description" name="description"
+                                placeholder="Descripción del usuario" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 
+                            rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"></textarea>
+                        </label>
+                        <button @click="updateUser"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r mt-4">
+                            Agregar
+                        </button>
+                        <button @click="showDescriptionInput = !showDescriptionInput"
+                            class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r mt-4">
+                            Cancelar
+                        </button>
+                    </div>
                 </div>
-                {{ user.profile.description }}
+                <div v-if="!showDescriptionInput" class="grid">
+                    {{ user.profile.description }}
+                    <button @click="showDescriptionInput = !showDescriptionInput"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold w-64 py-2 px-4 rounded-r mt-4 mx-2">
+                            Actualizar Descripción
+                    </button>
+                </div>  
             </section>
             <section v-if="user.role === 'OWNER'" class="mt-8">
                 <h2 class="text-2xl">Inmuebles:</h2>
