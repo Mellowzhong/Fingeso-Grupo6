@@ -1,10 +1,12 @@
 <script setup>
 import { useStore } from 'vuex';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { getOwnerProfile } from '../services/PropertyServices';
 
 const store = useStore();
 
 const property = computed(() => store.getters.getProperty);
+const profileOwner = ref({});
 
 const currentImageIndex = ref(0);
 
@@ -25,6 +27,19 @@ const nextImage = () => {
         currentImageIndex.value = 0;
     }
 };
+
+const getFirstName = async (inmuebleId) => {
+    const response = await getOwnerProfile(inmuebleId);
+    if (response.success) {
+        profileOwner.value = response.data;
+    } else {
+        console.log('Error al obtener el nombre del propietario');
+    }
+};
+
+onMounted(async () => {
+    await getFirstName(property.value.id);
+})
 </script>
 
 <template>
@@ -102,9 +117,9 @@ const nextImage = () => {
                 <section>
                     <h2 class="text-2xl">Propietario / Corredor de inmuebles</h2>
                     <div class="flex items-center space-x-2">
-                        <img class="rounded-full aspect-square object-cover" src="../../Images/Mob 2.png" width="64"
+                        <img class="rounded-full aspect-square object-cover" :src="profileOwner.photo" width="64"
                             height="64" alt="Foto de perfil" />
-                        <h3>Alonso Sanhueza</h3>
+                        <h3>{{ profileOwner.firstname }} {{ profileOwner.lastname }}</h3>
                     </div>
                 </section>
                 <section>

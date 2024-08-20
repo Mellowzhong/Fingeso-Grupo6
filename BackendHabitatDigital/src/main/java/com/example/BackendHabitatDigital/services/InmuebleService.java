@@ -3,6 +3,7 @@ package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.InmuebleEntity;
 import com.example.BackendHabitatDigital.entities.OwnerEntity;
+import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
@@ -73,6 +74,12 @@ public class InmuebleService {
         Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
         return inmuebles.get();
 
+    }
+
+    public ProfileEntity getOwnerProfile(long inmuebleid){
+        Optional<InmuebleEntity> inmuebleO= inmuebleRepository.findById(inmuebleid);
+        InmuebleEntity inmueble = inmuebleO.get();
+        return inmueble.getOwner().getUser().getProfile();
     }
     // Function to get all properties with null in the corredor field
     public List<InmuebleEntity> findInmueblesWithoutCorredor() {

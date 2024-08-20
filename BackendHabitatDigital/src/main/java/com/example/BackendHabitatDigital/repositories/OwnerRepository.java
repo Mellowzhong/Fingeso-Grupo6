@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface OwnerRepository extends JpaRepository<OwnerEntity,Long> {
     Optional<OwnerEntity> findByUser(UserEntity user);
+    Optional<OwnerEntity> findByUserId(Long userId);
 }
