@@ -64,13 +64,13 @@ public class InmuebleController {
 
     @GetMapping("/testing/{userId}")
     public List<InmuebleEntity> getAllInmueblesByOwner(@PathVariable Long userId) {
-        return this.inmuebleService.getAllInmueblesByOwner(userId);
+        return this.inmuebleService.findAllInmueblesByOwner(userId);
     }
 
     // Endpoint to get properties without a corredor assigned
     @GetMapping("/sin-corredor")
     public ResponseEntity<List<InmuebleEntity>> getInmueblesWithoutCorredor() {
-        List<InmuebleEntity> inmuebles = inmuebleService.getInmueblesWithoutCorredor();
+        List<InmuebleEntity> inmuebles = inmuebleService.findInmueblesWithoutCorredor();
         return ResponseEntity.ok(inmuebles);
     }
 }

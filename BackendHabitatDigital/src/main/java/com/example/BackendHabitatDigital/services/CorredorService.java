@@ -91,7 +91,7 @@ public class CorredorService {
                 .orElseThrow(() -> new SecurityException("User is not authorized or not a corredor"));
 
         // Return the list of properties without a corredor assigned
-        return inmuebleRepository.findInmueblesWithoutCorredor();
+        return inmuebleRepository.findByCorredorIsNull();
     }
 
 }
