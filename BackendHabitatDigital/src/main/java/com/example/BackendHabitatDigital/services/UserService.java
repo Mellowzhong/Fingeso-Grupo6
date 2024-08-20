@@ -31,7 +31,7 @@ public class UserService {
     JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final PasswordEncoder passwordEncoder;
-    
+
     // Create user
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
@@ -58,6 +58,7 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
+    // Update user being admin (password or username)
     public UserEntity updateUser(UserEntity updatedUser) {
         // Get the current authentication information from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,36 +75,25 @@ public class UserService {
         UserEntity existingUser = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + currentUsername + " not found"));
 
+        // Check if the authenticated user is an admin
         boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
 
-        // Verify that the user is authorized to update this account
-        if (!currentUsername.equals(existingUser.getUsername()) && !isAdmin) {
+        // Ensure only admins can update the email or password
+        if (!isAdmin) {
             throw new SecurityException("Not authorized to update this user");
         }
 
-        // Update if there are changes
-        if (updatedUser.getProfile() != null) {
-            ProfileEntity updatedProfile = updatedUser.getProfile();
-            ProfileEntity existingProfile = existingUser.getProfile();
-
-            // Update profile fields
-            if (updatedProfile.getFirstname() != null) {
-                existingProfile.setFirstname(updatedProfile.getFirstname());
-            }
-
-            if (updatedProfile.getLastname() != null) {
-                existingProfile.setLastname(updatedProfile.getLastname());
-            }
-
-            if (updatedProfile.getContact() != null) {
-                existingProfile.setContact(updatedProfile.getContact());
-            }
-            if (updatedProfile.getDescription() != null) {
-                existingProfile.setDescription(updatedProfile.getDescription());
-            }
-
-            existingUser.setProfile(existingProfile);
+        // Update email if provided
+        if (updatedUser.getUsername() != null) {
+            existingUser.setUsername(updatedUser.getUsername());
         }
+
+        // Update password if provided
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        // Save the updated user entity
         return userRepository.save(existingUser);
     }
 

@@ -18,19 +18,4 @@ public class ProfileController {
         ProfileEntity newProfile = profileService.updateProfile(profile);
         return ResponseEntity.ok(newProfile);
     }
-
-    @GetMapping("/{id}/picture")
-    public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long id) {
-        ProfileEntity profile = profileService.getProfileById(id)
-                .orElseThrow(() -> new RuntimeException("Profile with id" + id + " does not exist"));
-
-        byte[] imageData = profile.getPicture();
-        if (imageData == null || imageData.length == 0) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-                .header("Content-Type", "image/jpeg")
-                .body(imageData);
-    }
 }
