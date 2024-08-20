@@ -1,10 +1,13 @@
 <script setup>
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import { computed, onMounted, ref } from 'vue';
 import { updateUsuario, getUsuarioByEmail } from '../services/UserServices';
 import { getAllPropertysByOwner } from '../../property/services/PropertyServices';
 import PropertyCard from '../../home/components/PropertyCard.vue';
 
+
+const router = useRouter();
 const store = useStore();
 const user = computed(() => store.getters.getUsuario);
 const showImageInput = ref(false);
@@ -47,6 +50,12 @@ const fetchUser = async () => {
         console.log('Error al obtener usuario')
     }
 }
+
+const selectProperty = (property) => {
+    store.dispatch('selectProperty', property);
+    console.log(property);
+    router.push('/property');
+};
 
 onMounted(() => {
     fetchUser();
