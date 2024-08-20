@@ -68,14 +68,14 @@ public class InmuebleService {
         return new ResponseEntity<>("Se eliminó con éxito", HttpStatus.OK);
     }
 
-    public List<InmuebleEntity> getAllInmueblesByOwner(long userId) {
+    public List<InmuebleEntity> findAllInmueblesByOwner(long userId) {
         Optional<OwnerEntity> owner = ownerRepository.findById(userId);
         Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
         return inmuebles.get();
 
     }
     // Function to get all properties with null in the corredor field
-    public List<InmuebleEntity> getInmueblesWithoutCorredor() {
-        return inmuebleRepository.findInmueblesWithoutCorredor();
+    public List<InmuebleEntity> findInmueblesWithoutCorredor() {
+        return inmuebleRepository.findByCorredorIsNull();
     }
 }

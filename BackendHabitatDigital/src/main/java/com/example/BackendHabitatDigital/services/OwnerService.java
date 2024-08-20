@@ -57,7 +57,7 @@ public class OwnerService {
         inmueble.setServices(inmuebleForm.getServices());
         inmueble.setParking(inmuebleForm.getParking());
         inmueble.setFurnished(inmuebleForm.getFurnished());
-        inmueble.setAprobated(inmuebleForm.getAprobated());
+        inmueble.setApproved(inmuebleForm.getAprobated());
         inmueble.setPhotos(inmuebleForm.getPhotos());
 
         if (optionalOwner.isPresent()){

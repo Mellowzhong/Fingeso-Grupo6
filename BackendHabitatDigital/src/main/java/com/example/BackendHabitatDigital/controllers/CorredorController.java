@@ -38,13 +38,13 @@ public class CorredorController {
     }
     // Get properties of the authenticated corredor
     @GetMapping("/propiedades")
-    public ResponseEntity<List<InmuebleEntity>> getInmueblesByAuthenticatedCorredor() {
+    public ResponseEntity<List<InmuebleEntity>> findInmueblesByAuthenticatedCorredor() {
         List<InmuebleEntity> inmuebles = corredorService.getInmueblesByAuthenticatedCorredor();
         return ResponseEntity.ok(inmuebles);
     }
 
     @GetMapping("/explorar")
-    public ResponseEntity<List<InmuebleEntity>> getInmueblesWithoutCorredor() {
+    public ResponseEntity<List<InmuebleEntity>> findInmueblesWithoutCorredor() {
         List<InmuebleEntity> inmuebles = corredorService.getInmueblesWithoutCorredorForAuthenticatedCorredor();
         return ResponseEntity.ok(inmuebles);
     }

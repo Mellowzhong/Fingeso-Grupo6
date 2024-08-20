@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface InmuebleRepository extends JpaRepository<InmuebleEntity,Long> {
     Optional<List<InmuebleEntity>> findAllByOwner(OwnerEntity owner);
     List<InmuebleEntity> findByCorredorId(Long corredorId);
-    List<InmuebleEntity> findInmueblesWithoutCorredor();
+    List<InmuebleEntity> findByCorredorIsNull();
+
 }
