@@ -74,4 +74,8 @@ public class InmuebleService {
         return inmuebles.get();
 
     }
+    // Function to get all properties with null in the corredor field
+    public List<InmuebleEntity> getInmueblesWithoutCorredor() {
+        return inmuebleRepository.findInmueblesWithoutCorredor();
+    }
 }

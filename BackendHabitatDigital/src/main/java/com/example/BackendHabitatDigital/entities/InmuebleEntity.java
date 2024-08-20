@@ -54,7 +54,7 @@ public class InmuebleEntity {
 
     private Boolean furnished;
 
-    private Boolean aprobated;
+    private Boolean approved;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")

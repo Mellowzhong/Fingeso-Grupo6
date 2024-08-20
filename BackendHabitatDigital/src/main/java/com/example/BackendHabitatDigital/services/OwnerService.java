@@ -35,7 +35,7 @@ public class OwnerService {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(inmuebleForm.getUserEmail());
 
         if (optionalUser.isEmpty()){
-            return new ResponseEntity<>("no existe el usuario", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("The user doesn't exist", HttpStatus.BAD_REQUEST);
         }
 
         UserEntity user = optionalUser.get();

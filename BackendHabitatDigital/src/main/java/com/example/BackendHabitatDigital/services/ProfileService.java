@@ -74,8 +74,8 @@ public class ProfileService {
             existingProfile.setDescription(profile.getDescription());
         }
 
-        if(profile.getProfilePic() != null){
-            existingProfile.setProfilePic(profile.getProfilePic());
+        if(profile.getPhoto() != null){
+            existingProfile.setPhoto(profile.getPhoto());
         }
 
         return profileRepository.save(existingProfile);
