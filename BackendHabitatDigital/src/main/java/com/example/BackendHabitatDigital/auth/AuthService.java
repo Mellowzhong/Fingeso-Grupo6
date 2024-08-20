@@ -49,7 +49,7 @@ public class AuthService {
                 UserEntity user = UserEntity.builder()
                         .username(request.getUsername())
                         .password(passwordEncoder.encode(request.getPassword()))
-                        .role(RoleEntity.EXTERNAL)
+                        .role(RoleEntity.COMUN)
                         .profile(savedProfile)
                         .build();
                 userRepository.save(user);

@@ -1,6 +1,7 @@
 package com.example.BackendHabitatDigital.controllers;
 
 import com.example.BackendHabitatDigital.entities.InmuebleEntity;
+import com.example.BackendHabitatDigital.entities.ProfileEntity;
 import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
 import com.example.BackendHabitatDigital.services.InmuebleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,11 @@ public class InmuebleController {
     @DeleteMapping("/{inmuebleId}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long inmuebleId) {
         return this.inmuebleService.deleteInmueble(inmuebleId);
+    }
+
+    @GetMapping("/profileO/{inmuebleId}")
+    public ProfileEntity getOwnerProfileFromInmueble(@PathVariable Long inmuebleId) {
+        return this.inmuebleService.getOwnerProfile(inmuebleId);
     }
 
     @GetMapping("/testing/{userId}")
