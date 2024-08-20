@@ -9,7 +9,12 @@ const props = defineProps({
 
 <template>
     <figure class="w-64 p-4 relative bg-white rounded-lg shadow-md overflow-hidden m-2">
-        <img :src="property.photos[0]" :alt="property.type" class="w-52 h-52 object-scale-down mx-auto">
+        <div v-if="property.photos.length === 0">
+            <img src="../../Images/noImage.png" alt="Imagen de la propiedad" class="w-52 h-52 object-scale-down mx-auto">
+        </div>
+        <div v-else>
+            <img :src="property.photos[0]" :alt="property.type" class="w-52 h-52 object-scale-down mx-auto">
+        </div>
         <figcaption class="grid">
             <span class="text-lg font-bold mb-2">{{ property.type }}</span>
             <span class="text-lg font-bold mb-2"> {{ property.price }} UF </span>
