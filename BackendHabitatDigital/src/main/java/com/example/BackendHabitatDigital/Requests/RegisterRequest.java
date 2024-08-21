@@ -8,6 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/*
+    Descripcion: Esta clase `RegisterRequest` se utiliza para encapsular la información necesaria
+    para realizar una solicitud de registro de un nuevo usuario en el sistema. Contiene detalles personales
+    del usuario, así como la información necesaria para crear su cuenta y perfil.
+ */
 @Data
 @Builder
 @NoArgsConstructor

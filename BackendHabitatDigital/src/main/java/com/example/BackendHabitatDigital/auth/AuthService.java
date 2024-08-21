@@ -14,7 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+/*
+    Descripcion: Esta clase se encarga de manejar la lógica de negocio relacionada
+    con la autenticación de usuarios, incluyendo las operaciones de login y registro.
+    Utiliza repositorios para interactuar con la base de datos, servicios para
+    manejar tokens JWT y autenticación, y un codificador de contraseñas.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -24,6 +29,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    /*
+        Descripcion: Este método gestiona la operación de login. Autentica al usuario
+        utilizando el `AuthenticationManager`, busca los detalles del usuario en el
+        repositorio y genera un token JWT para el usuario autenticado.
+    */
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
@@ -33,6 +43,11 @@ public class AuthService {
                 .build();
     }
 
+    /*
+        Descripcion: Este método gestiona la operación de registro de un nuevo usuario.
+        Valida el nombre de usuario y la contraseña, crea un perfil asociado, guarda
+        el usuario en la base de datos, y genera un token JWT para el nuevo usuario.
+     */
     public AuthResponse register(RegisterRequest request) throws Exception {
         if (isAdmittedPassword(request.getPassword())) {
             if (isAdmittedUsername(request.getUsername())) {
@@ -65,10 +80,19 @@ public class AuthService {
         }
     }
 
+    /*
+        Descripcion: Este método privado valida si la contraseña cumple con los requisitos
+        mínimos, en este caso, que tenga al menos 3 caracteres.
+    */
     private boolean isAdmittedPassword(String password) {
         return password.length() >= 3;
     }
 
+
+    /*
+        Descripcion: Este método privado verifica si un nombre de usuario ya existe
+        en el repositorio. Es utilizado para evitar duplicados en el registro de nuevos usuarios.
+     */
     private boolean isAdmittedUsername(String username) {
         return !userRepository.existsByUsername(username);
     }

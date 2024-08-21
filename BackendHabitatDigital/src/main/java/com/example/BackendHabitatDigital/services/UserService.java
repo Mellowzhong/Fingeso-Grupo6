@@ -22,6 +22,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/*
+    Descripcion: Esta clase `UserService` es un servicio que gestiona la lógica de negocio relacionada
+    con los usuarios en el sistema. Proporciona métodos para crear, obtener, actualizar y eliminar usuarios,
+    así como para gestionar roles y contraseñas de usuarios.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,20 +37,30 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    // Create user
+    /*
+        Descripcion: Este método crea un nuevo usuario en el sistema y lo guarda en el repositorio de usuarios.
+     */
     public UserEntity createUser(UserEntity user) {
         return userRepository.save(user);
     }
 
-    // Retorna todos los usuarios en la base de datos
+    /*
+        Descripcion: Este método retorna una lista de todos los usuarios registrados en el sistema.
+     */
     public List<UserEntity> getAllUsers() {
         return userRepository.findAll();
     }
 
+    /*
+        Descripcion: Este método busca un usuario específico por el ID de su perfil.
+     */
     public Optional<UserEntity> getUserByProfileId(Long id) {
         return userRepository.findByProfileId(id);
     }
 
+    /*
+        Descripcion: Este método busca un usuario específico por su nombre de usuario.
+     */
     public UserEntity getUserByUsername(String username) {
         return userRepository.findByUsername(username).get();
     }
@@ -54,49 +69,49 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    /*
+        Descripcion: Este método busca un usuario específico por su ID.
+     */
     public Boolean userExistByUsername(String username) {
         return userRepository.existsByUsername(username);
     }
 
-    // Update user being admin (password or username)
+    /*
+        Descripcion: Este método actualiza la información de un usuario existente, asegurando que solo un usuario
+        autenticado con rol de administrador pueda realizar cambios en el nombre de usuario o la contraseña.
+     */
     public UserEntity updateUser(UserEntity updatedUser) {
-        // Get the current authentication information from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Check if the user is authenticated
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new SecurityException("User is not authenticated");
         }
 
-        // Get the current username from the authentication context
         String currentUsername = authentication.getName();
 
-        // Find the existing user by their username
         UserEntity existingUser = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> new UsernameNotFoundException("User with username " + currentUsername + " not found"));
 
-        // Check if the authenticated user is an admin
         boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"));
 
-        // Ensure only admins can update the email or password
         if (!isAdmin) {
             throw new SecurityException("Not authorized to update this user");
         }
 
-        // Update email if provided
         if (updatedUser.getUsername() != null) {
             existingUser.setUsername(updatedUser.getUsername());
         }
 
-        // Update password if provided
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
 
-        // Save the updated user entity
         return userRepository.save(existingUser);
     }
 
+    /*
+        Descripcion: Este método actualiza la contraseña de un usuario existente.
+     */
     public UserEntity updatePassword(UserEntity user) {
         UserEntity existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " does not exist."));
@@ -108,6 +123,10 @@ public class UserService {
         return userRepository.save(existingUser);
     }
 
+    /*
+        Descripcion: Este método actualiza el rol de un usuario. Solo los usuarios con rol de administrador
+        pueden realizar esta operación.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     public UserEntity updateUserRole(UserEntity user) throws Exception {
         UserEntity existingUser = userRepository.findById(user.getId())
@@ -124,6 +143,10 @@ public class UserService {
         throw new Exception("Try a different role.");
     }
 
+    /*
+        Descripcion: Este método elimina un usuario por su ID. Solo los usuarios con rol de administrador
+        pueden realizar esta operación.
+     */
     @PreAuthorize("hasRole('ADMIN')")
     public boolean deleteUser(Long id) throws Exception {
         try {
