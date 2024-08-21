@@ -17,6 +17,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Descripcion: Esta clase `InmuebleService` es un servicio que gestiona la lógica de negocio relacionada
+    con los inmuebles en el sistema. Proporciona métodos para agregar, obtener, y eliminar inmuebles, así como
+    para gestionar las relaciones entre los inmuebles y sus propietarios.
+ */
 @Service
 public class InmuebleService {
 
@@ -24,6 +29,10 @@ public class InmuebleService {
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
 
+    /*
+        Descripcion: Constructor de la clase `InmuebleService` que inyecta los repositorios necesarios
+        para manejar las operaciones relacionadas con inmuebles, usuarios y propietarios.
+     */
     @Autowired
     public InmuebleService(InmuebleRepository inmuebleRepository, UserRepository userRepository, OwnerRepository ownerRepository) {
         this.inmuebleRepository = inmuebleRepository;
@@ -31,7 +40,11 @@ public class InmuebleService {
         this.ownerRepository = ownerRepository;
     }
 
-    // Function to add a new product
+    /*
+        Descripcion: Este método agrega un nuevo inmueble al sistema y lo asocia con un propietario.
+        Verifica si el usuario proporcionado ya tiene una entidad `OwnerEntity` asociada. Si no es así,
+        crea una nueva entidad de propietario. Luego, asocia el inmueble con el propietario y lo guarda en el repositorio.
+     */
     public ResponseEntity<InmuebleEntity> addProduct(InmuebleEntity inmueble, String userEmail) {
         Optional<UserEntity> userOptional = userRepository.findByUsername(userEmail);
 
@@ -54,7 +67,9 @@ public class InmuebleService {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Function to get all products
+    /*
+        Descripcion: Este método obtiene una lista de todos los inmuebles registrados en el sistema.
+     */
     public List<InmuebleEntity> getAllInmuebles() {
         return this.inmuebleRepository.findAll();
     }
@@ -63,12 +78,18 @@ public class InmuebleService {
         return this.inmuebleRepository.findById(productId);
     }
 
-    // Function to delete a product
+    /*
+        Descripcion: Este método obtiene un inmueble específico por su ID.
+     */
     public ResponseEntity<Object> deleteInmueble(long inmuebleId) {
         this.inmuebleRepository.deleteById(inmuebleId);
         return new ResponseEntity<>("Se eliminó con éxito", HttpStatus.OK);
     }
 
+    /*
+        Descripcion: Este método obtiene todos los inmuebles asociados a un propietario específico
+        por el ID del propietario.
+     */
     public List<InmuebleEntity> findAllInmueblesByOwner(long userId) {
         Optional<OwnerEntity> owner = ownerRepository.findById(userId);
         Optional<List<InmuebleEntity>> inmuebles = this.inmuebleRepository.findAllByOwner(owner.get());
@@ -76,12 +97,20 @@ public class InmuebleService {
 
     }
 
+    /*
+        Descripcion: Este método obtiene el perfil del propietario de un inmueble específico
+        por el ID del inmueble.
+     */
     public ProfileEntity getOwnerProfile(long inmuebleid){
         Optional<InmuebleEntity> inmuebleO= inmuebleRepository.findById(inmuebleid);
         InmuebleEntity inmueble = inmuebleO.get();
         return inmueble.getOwner().getUser().getProfile();
     }
-    // Function to get all properties with null in the corredor field
+
+    /*
+        Descripcion: Este método obtiene todos los inmuebles que no tienen un corredor asignado
+        en el sistema.
+     */
     public List<InmuebleEntity> findInmueblesWithoutCorredor() {
         return inmuebleRepository.findByCorredorIsNull();
     }

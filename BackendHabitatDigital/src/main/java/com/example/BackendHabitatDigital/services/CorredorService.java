@@ -20,6 +20,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Descripcion: Esta clase `CorredorService` es un servicio que gestiona la lógica de negocio
+    relacionada con los corredores (brokers) en el sistema. Proporciona métodos para agregar nuevos
+    corredores, obtener corredores existentes y gestionar las propiedades asociadas a los corredores.
+ */
 @Service
 public class CorredorService {
     private final CorredorRepository corredorRepository;
@@ -27,7 +32,10 @@ public class CorredorService {
     // Just for access to the list of properties that the corredor would be able to take
     private final InmuebleRepository inmuebleRepository;
 
-
+    /*
+        Descripcion: Constructor de la clase `CorredorService` que inyecta los repositorios necesarios
+        para manejar las operaciones relacionadas con corredores, usuarios y propiedades.
+     */
     @Autowired
     public CorredorService(CorredorRepository corredorRepository, UserRepository userRepository, InmuebleRepository inmuebleRepository) {
         this.corredorRepository = corredorRepository;
@@ -35,6 +43,10 @@ public class CorredorService {
         this.inmuebleRepository = inmuebleRepository;
     }
 
+    /*
+        Descripcion: Este método agrega un nuevo corredor en el sistema. Busca un usuario existente
+        por correo electrónico, le asigna el rol de corredor, y guarda la nueva entidad `CorredorEntity`.
+     */
     public ResponseEntity<Object> addCorredor(String email) {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(email);
 
@@ -54,43 +66,50 @@ public class CorredorService {
         return new ResponseEntity<>("Successfully saved", HttpStatus.CREATED);
     }
 
-
+    /*
+        Descripcion: Este método obtiene una lista de todos los corredores registrados en el sistema.
+     */
     public List<CorredorEntity> getAllCorredores() {
         return this.corredorRepository.findAll();
     }
 
+    /*
+        Descripcion: Este método obtiene un corredor a partir de su ID.
+     */
     public Optional<CorredorEntity> getCorredorById(long corredorId) {
         return this.corredorRepository.findById(corredorId);
     }
 
-    // Function to get all properties of the authenticated user (corredor)
+    /*
+        Descripcion: Este método obtiene todas las propiedades asociadas al corredor autenticado.
+        Extrae la información de autenticación actual, verifica que el usuario sea un corredor,
+        y devuelve la lista de inmuebles asociados a ese corredor.
+     */
     public List<InmuebleEntity> getInmueblesByAuthenticatedCorredor() {
-        // Get the current authentication information
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Get the current user ID from the authentication context
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
-        // Find the corredor by the user's ID
         CorredorEntity corredor = corredorRepository.findCorredorById(currentUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
 
-        // Return the list of properties associated with the corredor
-        return corredor.getInmuebles(); // Return the list of inmuebles from the corredor instance
+        return corredor.getInmuebles();
     }
-    // Function to get properties without a broker assigned for the authenticated corredor
+
+    /*
+        Descripcion: Este método obtiene todas las propiedades que no tienen un corredor asignado
+        y son visibles para el corredor autenticado. Verifica que el usuario sea un corredor autorizado
+        y devuelve la lista de inmuebles sin corredor asignado.
+     */
     public List<InmuebleEntity> getInmueblesWithoutCorredorForAuthenticatedCorredor() {
-        // Get the current authentication information
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Get the current user ID from the authentication context
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
-        // Verify if the user is a corredor
         CorredorEntity corredor = corredorRepository.findCorredorById(currentUserId)
                 .orElseThrow(() -> new SecurityException("User is not authorized or not a corredor"));
 
-        // Return the list of properties without a corredor assigned
         return inmuebleRepository.findByCorredorIsNull();
     }
 
