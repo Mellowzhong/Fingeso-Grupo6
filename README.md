@@ -5,7 +5,7 @@
     - Verificar que Node.js este instalado correctamente
     - Abrir la carpeta en donde está alojado el Front-end del proyecto por consola
     - Ejecutar npm install para la correcta instalacion de las dependencias
-    - Ejecutar npm dev
+    - Ejecutar npm run dev
   * Back-end:
     - Verificar que Spring boot maven 3.2.3 con java, este correctamente instalado
     - Verificar la correcta instalacion de PostgreSQL en su version 15.6
