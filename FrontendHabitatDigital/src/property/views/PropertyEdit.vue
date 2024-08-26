@@ -1,5 +1,5 @@
 <script setup>
-import PropertyForm from '../components/PropertyForm.vue';
+import PropertyEditForm from '../components/PropertyEditForm.vue';
 import { ref, computed } from 'vue';
 import { postProperty } from '../services/PropertyServices';
 import { useRouter } from 'vue-router';
@@ -8,27 +8,7 @@ import { useStore } from 'vuex';
 const router = useRouter();
 const store = useStore();
 
-const user = computed(() => store.getters.getUsuario);
-
-const property = ref({
-    userEmail: user.value.username,
-    disponibility: true,
-    sale: false,
-    price: '',
-    direction: '',
-    type: '',
-    rooms: '',
-    bathrooms: '',
-    squareMeters: '',
-    yearConstruction: '',
-    state: '',
-    description: '',
-    photos: [],
-    services: '',
-    parking: false,
-    furnished: false,
-    aprobated: false,
-});
+const property = computed(() => store.getters.getProperty);
 
 const saveProperty = async () => {
     const response = await postProperty(property.value);
@@ -46,6 +26,6 @@ const saveProperty = async () => {
 
 <template>
     <div>
-        <PropertyForm :property="property" @save="saveProperty" :isEdit="false" />
+        <PropertyEditForm :property="property" @save="saveProperty" :isEdit="false" />
     </div>
 </template>
