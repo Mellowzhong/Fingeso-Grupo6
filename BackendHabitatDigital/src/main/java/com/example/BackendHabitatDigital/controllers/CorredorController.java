@@ -73,15 +73,25 @@ public class CorredorController {
         return ResponseEntity.ok(inmuebles);
     }
 
+
     /*
-        Descripcion: Este método maneja las solicitudes GET para explorar los inmuebles
-        que no están asociados con ningún corredor y son visibles para el corredor
-        autenticado. Devuelve una lista de estos inmuebles.
-     */
-    @GetMapping("/explorar")
-    public ResponseEntity<List<InmuebleEntity>> findInmueblesWithoutCorredor() {
-        List<InmuebleEntity> inmuebles = corredorService.getInmueblesWithoutCorredorForAuthenticatedCorredor();
+    Descripcion: Este método permite a un corredor ver todas las propiedades asignadas a él
+    que aún no han sido aceptadas (corredor es null).
+    URL: /corredor/inmuebles/request
+ */
+    @GetMapping("/inmuebles/requests")
+    public ResponseEntity<List<InmuebleEntity>> getInmueblesWithoutAcceptedCorredor() {
+        List<InmuebleEntity> inmuebles = corredorService.getInmueblesWithoutAcceptedCorredor();
         return ResponseEntity.ok(inmuebles);
     }
 
+    /*
+        Descripcion: Este endpoint permite a un corredor aceptar una propiedad asignada a él.
+        Verifica que la propiedad esté en la lista del corredor y aún no tenga un corredor asignado.
+        URL: /corredor/aceptar/{inmuebleId}
+     */
+    @PostMapping("/aceptar/{inmuebleId}")
+    public ResponseEntity<String> acceptProperty(@PathVariable Long inmuebleId) {
+        return corredorService.acceptProperty(inmuebleId);
+    }
 }

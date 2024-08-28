@@ -79,7 +79,7 @@ public class InmuebleController {
         String userEmail = authentication.getName();
 
         // Call to service
-        return inmuebleService.addProduct(inmueble, userEmail);
+        return inmuebleService.addProperty(inmueble, userEmail);
     }
 
     /*
@@ -114,4 +114,17 @@ public class InmuebleController {
         List<InmuebleEntity> inmuebles = inmuebleService.findInmueblesWithoutCorredor();
         return ResponseEntity.ok(inmuebles);
     }
+    /*
+    Descripcion: Este endpoint permite a un propietario asignar un corredor a un inmueble.
+    Requiere los IDs del inmueble y del corredor.
+    URL: /inmueble/{inmuebleId}/asigncorredor/{corredorId}
+ */
+    @PostMapping("/{inmuebleId}/asigncorredor/{corredorId}")
+    public ResponseEntity<String> assignCorredorToInmueble(
+            @PathVariable Long inmuebleId,
+            @PathVariable Long corredorId) {
+
+        return inmuebleService.assignCorredorToInmueble(inmuebleId, corredorId);
+    }
+
 }
