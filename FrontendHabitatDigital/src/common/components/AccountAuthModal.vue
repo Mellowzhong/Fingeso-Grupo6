@@ -37,7 +37,7 @@ const handleFormChange = () => {
 
             <body>
                 <LoginForm v-if="isLoginForm" v-model:onClose="props.onClose" />
-                <SignUpForm v-else v-model:onClose="props.onClose" />
+                <SignUpForm v-else v-model:onClose="props.onClose" v-model:changeToLoginForm="handleFormChange" />
             </body>
             <footer v-show="isLoginForm" class="flex flex-col pt-4">
                 <p class="text-xs text-center mb-1">¿todavia no tienes una cuenta?</p>

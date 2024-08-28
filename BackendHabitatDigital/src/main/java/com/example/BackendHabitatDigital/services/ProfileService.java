@@ -23,6 +23,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Descripcion: Esta clase `ProfileService` es un servicio que gestiona la lógica de negocio relacionada
+    con los perfiles de usuario en el sistema. Proporciona métodos para crear, obtener, actualizar y eliminar
+    perfiles, así como para manejar la carga y descarga de imágenes de perfil.
+ */
 @Service
 public class ProfileService {
     @Autowired
@@ -30,16 +35,29 @@ public class ProfileService {
     @Autowired
     UserService userService;
 
+    /*
+        Descripcion: Este método guarda un perfil en el repositorio de perfiles.
+     */
     public ProfileEntity saveProfile(ProfileEntity profile) { return profileRepository.save(profile); }
 
+    /*
+        Descripcion: Este método obtiene una lista de todos los perfiles registrados en el sistema.
+     */
     public List<ProfileEntity> getProfiles() {
         return profileRepository.findAll();
     }
 
+    /*
+        Descripcion: Este método obtiene un perfil específico por su ID.
+     */
     public Optional<ProfileEntity> getProfileById(Long id) {
         return profileRepository.findById(id);
     }
 
+    /*
+        Descripcion: Este método actualiza un perfil existente. Verifica que el usuario esté autenticado
+        y luego actualiza los campos del perfil con los nuevos valores proporcionados.
+     */
     public ProfileEntity updateProfile(ProfileEntity profile) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -81,15 +99,20 @@ public class ProfileService {
         return profileRepository.save(existingProfile);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    public boolean deleteProfile(Long id) throws Exception {
-        try {
-            profileRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
+    /*
+       Descripcion: Este método elimina un perfil por su ID. Solo puede ser ejecutado por usuarios con
+       rol de `ADMIN`.
+     */
+   @PreAuthorize("hasRole('ADMIN')")
+   public boolean deleteProfile(Long id) throws Exception {
+       try {
+           profileRepository.deleteById(id);
+           return true;
+       } catch (Exception e) {
+           throw new Exception(e.getMessage());
+       }
+   }
+
 
     public byte[] handleFileUpload(MultipartFile file) throws Exception {
         try {

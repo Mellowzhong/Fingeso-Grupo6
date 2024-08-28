@@ -1,10 +1,12 @@
 <script setup>
 import { useStore } from 'vuex';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import { getOwnerProfile } from '../services/PropertyServices';
 
 const store = useStore();
 
 const property = computed(() => store.getters.getProperty);
+const profileOwner = ref({});
 
 const currentImageIndex = ref(0);
 
@@ -25,6 +27,19 @@ const nextImage = () => {
         currentImageIndex.value = 0;
     }
 };
+
+const getFirstName = async (inmuebleId) => {
+    const response = await getOwnerProfile(inmuebleId);
+    if (response.success) {
+        profileOwner.value = response.data;
+    } else {
+        console.log('Error al obtener el nombre del propietario');
+    }
+};
+
+onMounted(async () => {
+    await getFirstName(property.value.id);
+})
 </script>
 
 <template>
@@ -32,22 +47,28 @@ const nextImage = () => {
         <div class="flex flex-grow">
             <figure class="bg-gray-400 w-[40rem] h-[32rem] flex-1 overflow-hidden relative">
                 <!-- Imágenes -->
-                <img v-for="(image, index) in property.photos" :key="index" :src="image"
-                    :alt="`Imagen ${index + 1} de la propiedad`"
-                    class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300"
-                    :class="{ 'opacity-100': index === currentImageIndex, 'opacity-0': index !== currentImageIndex }">
+                <div v-if="property.photos.length === 0">
+                    <img src="../../Images/noImage.png" alt="Imagen de la propiedad"
+                        class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300">
+                </div>
+                <div v-else>
+                    <img v-for="(image, index) in property.photos" :key="index" :src="image"
+                        :alt="`Imagen ${index + 1} de la propiedad`"
+                        class="absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-300"
+                        :class="{ 'opacity-100': index === currentImageIndex, 'opacity-0': index !== currentImageIndex }">
 
-                <!-- Flecha izquierda -->
-                <button v-if="property.photos.length > 1" @click="previousImage"
-                    class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">
-                    &#10094;
-                </button>
+                    <!-- Flecha izquierda -->
+                    <button v-if="property.photos.length > 1" @click="previousImage"
+                        class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-r">
+                        &#10094;
+                    </button>
 
-                <!-- Flecha derecha -->
-                <button v-if="property.photos.length > 1" @click="nextImage"
-                    class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">
-                    &#10095;
-                </button>
+                    <!-- Flecha derecha -->
+                    <button v-if="property.photos.length > 1" @click="nextImage"
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-l">
+                        &#10095;
+                    </button>
+                </div>
             </figure>
             <figcaption class="flex-1 p-4 space-y-2">
                 <h1 class="text-4xl">{{ property.type }}</h1>
@@ -102,9 +123,9 @@ const nextImage = () => {
                 <section>
                     <h2 class="text-2xl">Propietario / Corredor de inmuebles</h2>
                     <div class="flex items-center space-x-2">
-                        <img class="rounded-full aspect-square object-cover" src="../../Images/Mob 2.png" width="64"
+                        <img class="rounded-full aspect-square object-cover" :src="profileOwner.photo" width="64"
                             height="64" alt="Foto de perfil" />
-                        <h3>Alonso Sanhueza</h3>
+                        <h3>{{ profileOwner.firstname }} {{ profileOwner.lastname }}</h3>
                     </div>
                 </section>
                 <section>

@@ -8,6 +8,10 @@ const props = defineProps({
     onClose: {
         type: Function,
         required: true,
+    },
+    changeToLoginForm: {
+        type: Function,
+        required: true,
     }
 });
 
@@ -48,6 +52,7 @@ const signUp = async () => {
         console.log('Usuario creado con éxito');
         clearUser();
         props.onClose();
+        props.changeToLoginForm();
     } else {
         console.log('Error al crear usuario');
     }

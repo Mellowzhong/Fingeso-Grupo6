@@ -34,12 +34,10 @@
 
 <template>
     <aside v-show="isOpen" @click="onClose" class="bg-black bg-opacity-50 fixed inset-0 z-50">
-        <nav class="bg-white w-40 absolute top-16 right-32 rounded-xl p-4">
+        <nav class="bg-white w-50 absolute top-16 right-32 rounded-xl p-4">
             <ul class="flex flex-col items-center space-y-2">
                 <li><RouterLink to="/user">Ir a mi perfil</RouterLink></li>
                 <li v-show="canPublish"><RouterLink to="/propertyRegister">Publicar Inmueble</RouterLink></li>
-                <li>Configuración</li>
-                <li>sans</li>
                 <li @click="logout">Cerrar sesión</li>
             </ul>
         </nav>

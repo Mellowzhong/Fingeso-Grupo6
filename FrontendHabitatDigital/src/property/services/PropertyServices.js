@@ -27,3 +27,12 @@ export const getAllPropertysByOwner = async (userId) => {
     return { success: false, data: error };
   }
 };
+
+export const getOwnerProfile = async (inmuebleId) => {
+  try {
+    const response = await api.get(`/inmueble/profileO/${inmuebleId}`);
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, data: error };
+  }
+};

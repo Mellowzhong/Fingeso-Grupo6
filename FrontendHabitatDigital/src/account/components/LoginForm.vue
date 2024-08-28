@@ -8,7 +8,7 @@ const props = defineProps({
     onClose: {
         type: Function,
         required: true,
-    }
+    },
 });
 
 const store = useStore();

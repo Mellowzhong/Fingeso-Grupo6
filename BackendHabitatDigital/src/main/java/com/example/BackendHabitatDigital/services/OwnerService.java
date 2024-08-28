@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/*
+    Descripcion: Esta clase `OwnerService` es un servicio que gestiona la lógica de negocio relacionada
+    con los propietarios (owners) en el sistema. Proporciona métodos para agregar nuevos propietarios,
+    obtener propietarios existentes y gestionar las relaciones entre los propietarios y sus inmuebles.
+ */
 @Service
 public class OwnerService {
     private final OwnerRepository ownerRepository;
@@ -23,6 +28,10 @@ public class OwnerService {
 
     private final CorredorRepository corredorRepository;
 
+    /*
+        Descripcion: Constructor de la clase `OwnerService` que inyecta los repositorios necesarios
+        para manejar las operaciones relacionadas con propietarios, usuarios, inmuebles y corredores.
+     */
     @Autowired
     public OwnerService(OwnerRepository ownerRepository, UserRepository userRepository, InmuebleRepository inmuebleRepository, CorredorRepository corredorRepository) {
         this.ownerRepository = ownerRepository;
@@ -31,6 +40,12 @@ public class OwnerService {
         this.corredorRepository = corredorRepository;
     }
 
+    /*
+        Descripcion: Este método agrega un nuevo propietario al sistema o asocia un inmueble a un propietario
+        existente. Verifica si el usuario proporcionado ya tiene una entidad `OwnerEntity` asociada. Si no es así,
+        crea una nueva entidad de propietario. Luego, asocia el inmueble con el propietario y, opcionalmente,
+        con un corredor si se proporciona el correo electrónico de un corredor.
+     */
     public ResponseEntity<Object> addOwner(InmuebleRequest inmuebleForm) {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(inmuebleForm.getUserEmail());
 
@@ -44,7 +59,7 @@ public class OwnerService {
 
         InmuebleEntity inmueble = new InmuebleEntity();
 
-        inmueble.setDisponibility(inmuebleForm.getSale());
+        inmueble.setDisponibility(Boolean.TRUE);
         inmueble.setPrice(inmuebleForm.getPrice());
         inmueble.setDirection(inmuebleForm.getDirection());
         inmueble.setType(inmuebleForm.getType());
@@ -95,14 +110,23 @@ public class OwnerService {
         }
     }
 
+    /*
+        Descripcion: Este método obtiene una lista de todos los propietarios registrados en el sistema.
+     */
     public List<OwnerEntity> getAllOwners() {
         return this.ownerRepository.findAll();
     }
 
+    /*
+        Descripcion: Este método obtiene un propietario específico por su ID.
+     */
     public Optional<OwnerEntity> getOwnerById(long ownerId) {
         return this.ownerRepository.findById(ownerId);
     }
 
+    /*
+        Descripcion: Este método busca un propietario específico por el ID del usuario.
+     */
     public Optional<OwnerEntity> findOwnerByUserId(Long userId) {
         return ownerRepository.findById(userId);
     }
