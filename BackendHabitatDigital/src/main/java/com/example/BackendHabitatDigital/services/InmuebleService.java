@@ -85,39 +85,37 @@ public class InmuebleService {
         return inmuebleO.map(inmueble -> inmueble.getOwner().getUser().getProfile()).orElse(null);
     }
 
-    public List<InmuebleEntity> findInmueblesWithoutCorredor() {
-        return inmuebleRepository.findByCorredorIsNull();
-    }
 
-    public ResponseEntity<String> assignCorredorToInmueble(Long inmuebleId, Long corredorId) {
+    public ResponseEntity<String> requestCorredorToInmueble(Long inmuebleId, Long corredorId) {
+        // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentOwnerUsername = authentication.getName(); // Esto es el email
+        String currentOwnerUsername = authentication.getName(); // Esto asume que el nombre de usuario es el email
 
+        // Usar OwnerRepository para encontrar el OwnerEntity basado en el email del usuario
         OwnerEntity owner = ownerRepository.findByUserEmail(currentOwnerUsername)
                 .orElseThrow(() -> new SecurityException("User is not authorized or not an owner"));
 
+        // Obtener el inmueble por su ID
         InmuebleEntity inmueble = inmuebleRepository.findById(inmuebleId)
-                .orElseThrow(() -> new EntityNotFoundException("Property not found with ID: " + inmuebleId));
+                .orElseThrow(() -> new EntityNotFoundException("Inmueble not found with ID: " + inmuebleId));
 
+        // Verificar que el usuario autenticado es el propietario del inmueble
         if (!inmueble.getOwner().equals(owner)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to modify this property.");
         }
 
+        // Obtener el corredor por su ID
         CorredorEntity corredor = corredorRepository.findById(corredorId)
                 .orElseThrow(() -> new EntityNotFoundException("Corredor not found with ID: " + corredorId));
 
-        // Agregar inmueble a la lista del corredor en memoria
-        if (!corredor.getInmuebles().contains(inmueble)) {
-            corredor.getInmuebles().add(inmueble);
-        }
+        // Agregar el ID del inmueble a la lista de inmuebles pendientes del corredor SIN cambiar el corredor_id del inmueble
+        corredor.getInmueblesPendientes().add(inmueble.getId());
 
-        // Solo guarda cambios del corredor, no cambia la columna corredor_id en inmueble
+        // Guardar el corredor con la lista de inmuebles pendientes actualizada
         corredorRepository.save(corredor);
 
-        return ResponseEntity.ok("Corredor assigned to property successfully.");
+        return ResponseEntity.ok("Inmueble assigned to corredor's pending list successfully without changing corredor_id.");
     }
 
-
-
-
 }
+

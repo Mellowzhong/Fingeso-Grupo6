@@ -109,22 +109,17 @@ public class InmuebleController {
     /*
         Descripcion: metodo que obtiene todos los inmuebles que no tienen un corredor asociado
      */
-    @GetMapping("/sin-corredor")
-    public ResponseEntity<List<InmuebleEntity>> getInmueblesWithoutCorredor() {
-        List<InmuebleEntity> inmuebles = inmuebleService.findInmueblesWithoutCorredor();
-        return ResponseEntity.ok(inmuebles);
-    }
     /*
     Descripcion: Este endpoint permite a un propietario asignar un corredor a un inmueble.
     Requiere los IDs del inmueble y del corredor.
     URL: /inmueble/{inmuebleId}/asigncorredor/{corredorId}
  */
-    @PostMapping("/{inmuebleId}/asigncorredor/{corredorId}")
-    public ResponseEntity<String> assignCorredorToInmueble(
+    @PostMapping("/{inmuebleId}/requestcorredor/{corredorId}")
+    public ResponseEntity<String> requestCorredorToInmueble(
             @PathVariable Long inmuebleId,
             @PathVariable Long corredorId) {
 
-        return inmuebleService.assignCorredorToInmueble(inmuebleId, corredorId);
+        return inmuebleService.requestCorredorToInmueble(inmuebleId, corredorId);
     }
 
 }

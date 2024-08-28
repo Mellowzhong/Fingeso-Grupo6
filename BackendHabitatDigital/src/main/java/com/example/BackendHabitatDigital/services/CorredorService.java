@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CorredorService {
@@ -58,23 +59,31 @@ public class CorredorService {
         return this.corredorRepository.findById(corredorId);
     }
 
-    public List<InmuebleEntity> getInmueblesByAuthenticatedCorredor() {
+    public List<Long> getInmueblesPendientes() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
-        CorredorEntity corredor = corredorRepository.findCorredorById(currentUserId)
-                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
-
-        return corredor.getInmuebles();
-    }
-
-    public List<InmuebleEntity> getInmueblesWithoutAcceptedCorredor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+        // Encuentra al corredor basado en el usuario actual
         CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
 
-        return inmuebleRepository.findByCorredorIsNullAndInmueblesIn(corredor.getInmuebles());
+        // Retorna la lista de IDs de inmuebles pendientes
+        return corredor.getInmueblesPendientes();
+    }
+
+    public List<InmuebleEntity> getInmueblesPendientesCompleta() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encuentra al corredor basado en el usuario actual
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        // Obtener los IDs de inmuebles pendientes
+        List<Long> inmueblesPendientesIds = corredor.getInmueblesPendientes();
+
+        // Obtener la información completa de los inmuebles usando los IDs pendientes
+        return inmuebleRepository.findAllById(inmueblesPendientesIds);
     }
 
     public ResponseEntity<String> acceptProperty(Long inmuebleId) {

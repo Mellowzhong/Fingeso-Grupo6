@@ -42,11 +42,13 @@ public class CorredorEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    /*
-        Descripcion: Relación uno a muchos con la entidad `InmuebleEntity`, representando
-        que un corredor puede estar asociado a múltiples inmuebles. La relación está mapeada
-        a través del campo `id` en `InmuebleEntity`.
-     */
-    @OneToMany(mappedBy = "id")
-    private List<InmuebleEntity> inmuebles;
+    // Lista de inmuebles oficialmente asignados al corredor
+    @OneToMany(mappedBy = "corredor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<InmuebleEntity> inmuebles = new ArrayList<>();
+
+    // Nueva lista de IDs de inmuebles pendientes de aceptación
+    @ElementCollection
+    @CollectionTable(name = "corredor_inmuebles_pendientes", joinColumns = @JoinColumn(name = "corredor_id"))
+    @Column(name = "inmueble_id")
+    private List<Long> inmueblesPendientes = new ArrayList<>();
 }

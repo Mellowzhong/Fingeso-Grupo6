@@ -77,7 +77,7 @@ public class InmuebleEntity {
         inmueble puede estar asociado a un único corredor. La columna `corredor_id` en la tabla
         `inmueble` se utiliza como clave externa para referenciar la entidad `CorredorEntity`.
      */
-    @OneToOne
-    @JoinColumn(name = "corredor_id")
+    @ManyToOne
+    @JoinColumn(name = "corredor_id", nullable = true) // Este campo puede ser NULL
     private CorredorEntity corredor;
 }
