@@ -62,10 +62,17 @@ public class CorredorController {
         return this.corredorService.addCorredor(email);
     }
 
+    @GetMapping("/inmuebles")
+    public ResponseEntity<List<InmuebleEntity>> obtenerInmueblesAsignados() {
+        List<InmuebleEntity> inmueblesAsignados = corredorService.getAssignedProperties();
+        return ResponseEntity.ok(inmueblesAsignados);
+    }
+
     /*
     Descripcion: Este método permite a un corredor ver todas las propiedades asignadas a él
     que aún no han sido aceptadas (corredor es null).
     URL: /corredor/inmuebles/request
+
  */
     @GetMapping("/inmuebles/requests")
     public ResponseEntity<List<InmuebleEntity>> getInmueblesPendientesCompleta() {
@@ -81,5 +88,10 @@ public class CorredorController {
     @PostMapping("/aceptar/{inmuebleId}")
     public ResponseEntity<String> acceptProperty(@PathVariable Long inmuebleId) {
         return corredorService.acceptProperty(inmuebleId);
+    }
+
+    @PostMapping("/reject/{inmuebleId}")
+    public ResponseEntity<String> rejectProperty(@PathVariable Long inmuebleId) {
+        return corredorService.rejectProperty(inmuebleId);
     }
 }

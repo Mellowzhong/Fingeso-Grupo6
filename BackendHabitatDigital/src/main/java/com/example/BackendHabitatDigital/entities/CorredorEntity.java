@@ -1,5 +1,8 @@
 package com.example.BackendHabitatDigital.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "corredor")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class CorredorEntity {
     /*
         Descripcion: Campo que representa el identificador único de la entidad `CorredorEntity`.
@@ -44,6 +48,7 @@ public class CorredorEntity {
 
     // Lista de inmuebles oficialmente asignados al corredor
     @OneToMany(mappedBy = "corredor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<InmuebleEntity> inmuebles = new ArrayList<>();
 
     // Nueva lista de IDs de inmuebles pendientes de aceptación
