@@ -105,8 +105,12 @@ const saveForm = () => {
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="type">
                             Tipo:
                         </label>
-                        <input v-model="property.type" type="text" id="type" name="type" placeholder="Apartamento"
-                            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                        <select v-model="property.type" id="type" name="type"
+                            placeholder="Apartamento"
+                            class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Casa">Casa</option>
+                        </select>
                     </div>
 
                     <!-- Room Number input field -->
