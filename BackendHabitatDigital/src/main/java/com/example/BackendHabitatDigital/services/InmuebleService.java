@@ -13,8 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class InmuebleService {
@@ -117,5 +116,24 @@ public class InmuebleService {
         return ResponseEntity.ok("Inmueble assigned to corredor's pending list successfully without changing corredor_id.");
     }
 
+    /*
+        Descripcion: Este método obtiene todos los inmuebles que se encuentran disponibles
+    */
+    public List<InmuebleEntity> getAllinmeblesDisponibles(){
+        List<InmuebleEntity> inmuebles = this.getAllInmuebles();
+        List<InmuebleEntity> inmueblesDisponibles = new ArrayList<>();
+        for (InmuebleEntity inmueble : inmuebles){
+            if (inmueble.getDisponibility() == true){
+                inmueblesDisponibles.add(inmueble);
+            }
+        }
+        Collections.sort(inmueblesDisponibles, new Comparator<InmuebleEntity>() {
+            @Override
+            public int compare(InmuebleEntity i1, InmuebleEntity i2) {
+                return i2.getId().compareTo(i1.getId()); // from highest to lowest ID
+            }
+        });
+        return inmueblesDisponibles;
+    }
 }
 
