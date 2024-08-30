@@ -62,26 +62,36 @@ public class CorredorController {
         return this.corredorService.addCorredor(email);
     }
 
-    /*
-        Descripcion: Este método maneja las solicitudes GET para obtener las propiedades
-        asociadas al corredor autenticado. Devuelve una lista de inmuebles que
-        pertenecen al corredor autenticado.
-    */
-    @GetMapping("/propiedades")
-    public ResponseEntity<List<InmuebleEntity>> findInmueblesByAuthenticatedCorredor() {
-        List<InmuebleEntity> inmuebles = corredorService.getInmueblesByAuthenticatedCorredor();
-        return ResponseEntity.ok(inmuebles);
+    @GetMapping("/inmuebles")
+    public ResponseEntity<List<InmuebleEntity>> obtenerInmueblesAsignados() {
+        List<InmuebleEntity> inmueblesAsignados = corredorService.getAssignedProperties();
+        return ResponseEntity.ok(inmueblesAsignados);
     }
 
     /*
-        Descripcion: Este método maneja las solicitudes GET para explorar los inmuebles
-        que no están asociados con ningún corredor y son visibles para el corredor
-        autenticado. Devuelve una lista de estos inmuebles.
+    Descripcion: Este método permite a un corredor ver todas las propiedades asignadas a él
+    que aún no han sido aceptadas (corredor es null).
+    URL: /corredor/inmuebles/request
+
+ */
+    @GetMapping("/inmuebles/requests")
+    public ResponseEntity<List<InmuebleEntity>> getInmueblesPendientesCompleta() {
+        List<InmuebleEntity> inmueblesPendientes = corredorService.getInmueblesPendientesCompleta();
+        return ResponseEntity.ok(inmueblesPendientes);
+    }
+
+    /*
+        Descripcion: Este endpoint permite a un corredor aceptar una propiedad asignada a él.
+        Verifica que la propiedad esté en la lista del corredor y aún no tenga un corredor asignado.
+        URL: /corredor/aceptar/{inmuebleId}
      */
-    @GetMapping("/explorar")
-    public ResponseEntity<List<InmuebleEntity>> findInmueblesWithoutCorredor() {
-        List<InmuebleEntity> inmuebles = corredorService.getInmueblesWithoutCorredorForAuthenticatedCorredor();
-        return ResponseEntity.ok(inmuebles);
+    @PostMapping("/aceptar/{inmuebleId}")
+    public ResponseEntity<String> acceptProperty(@PathVariable Long inmuebleId) {
+        return corredorService.acceptProperty(inmuebleId);
     }
 
+    @PostMapping("/reject/{inmuebleId}")
+    public ResponseEntity<String> rejectProperty(@PathVariable Long inmuebleId) {
+        return corredorService.rejectProperty(inmuebleId);
+    }
 }

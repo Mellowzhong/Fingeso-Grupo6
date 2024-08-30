@@ -38,7 +38,7 @@ onMounted(() => {
         <!-- Product Card -->
         <div v-else>
             <h2 class="text-2xl">Inmuebles</h2>
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-5 gap-4">
             <PropertyCard v-for="property in properties" :key="property.id" :property @click="selectProperty(property)"/>
         </div>
         </div>

@@ -1,7 +1,10 @@
 package com.example.BackendHabitatDigital.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "inmueble")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class InmuebleEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)
@@ -77,7 +81,8 @@ public class InmuebleEntity {
         inmueble puede estar asociado a un único corredor. La columna `corredor_id` en la tabla
         `inmueble` se utiliza como clave externa para referenciar la entidad `CorredorEntity`.
      */
-    @OneToOne
-    @JoinColumn(name = "corredor_id")
+    @ManyToOne
+    @JoinColumn(name = "corredor_id", nullable = true) // Este campo puede ser NULL
+    @JsonBackReference
     private CorredorEntity corredor;
 }

@@ -13,29 +13,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-/*
-    Descripcion: Esta clase `CorredorService` es un servicio que gestiona la lógica de negocio
-    relacionada con los corredores (brokers) en el sistema. Proporciona métodos para agregar nuevos
-    corredores, obtener corredores existentes y gestionar las propiedades asociadas a los corredores.
- */
 @Service
 public class CorredorService {
     private final CorredorRepository corredorRepository;
     private final UserRepository userRepository;
-    // Just for access to the list of properties that the corredor would be able to take
     private final InmuebleRepository inmuebleRepository;
 
-    /*
-        Descripcion: Constructor de la clase `CorredorService` que inyecta los repositorios necesarios
-        para manejar las operaciones relacionadas con corredores, usuarios y propiedades.
-     */
     @Autowired
     public CorredorService(CorredorRepository corredorRepository, UserRepository userRepository, InmuebleRepository inmuebleRepository) {
         this.corredorRepository = corredorRepository;
@@ -43,10 +32,6 @@ public class CorredorService {
         this.inmuebleRepository = inmuebleRepository;
     }
 
-    /*
-        Descripcion: Este método agrega un nuevo corredor en el sistema. Busca un usuario existente
-        por correo electrónico, le asigna el rol de corredor, y guarda la nueva entidad `CorredorEntity`.
-     */
     public ResponseEntity<Object> addCorredor(String email) {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(email);
 
@@ -66,51 +51,100 @@ public class CorredorService {
         return new ResponseEntity<>("Successfully saved", HttpStatus.CREATED);
     }
 
-    /*
-        Descripcion: Este método obtiene una lista de todos los corredores registrados en el sistema.
-     */
     public List<CorredorEntity> getAllCorredores() {
         return this.corredorRepository.findAll();
     }
 
-    /*
-        Descripcion: Este método obtiene un corredor a partir de su ID.
-     */
     public Optional<CorredorEntity> getCorredorById(long corredorId) {
         return this.corredorRepository.findById(corredorId);
     }
 
-    /*
-        Descripcion: Este método obtiene todas las propiedades asociadas al corredor autenticado.
-        Extrae la información de autenticación actual, verifica que el usuario sea un corredor,
-        y devuelve la lista de inmuebles asociados a ese corredor.
-     */
-    public List<InmuebleEntity> getInmueblesByAuthenticatedCorredor() {
-
+    // Todos los inmuebles asignados del corredor
+    public List<InmuebleEntity> getAssignedProperties() {
+        // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
-        CorredorEntity corredor = corredorRepository.findCorredorById(currentUserId)
+        // Encontrar al corredor por el ID del usuario autenticado
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
                 .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
 
+        // Retornar la lista de inmuebles asignados
         return corredor.getInmuebles();
     }
-
-    /*
-        Descripcion: Este método obtiene todas las propiedades que no tienen un corredor asignado
-        y son visibles para el corredor autenticado. Verifica que el usuario sea un corredor autorizado
-        y devuelve la lista de inmuebles sin corredor asignado.
-     */
-    public List<InmuebleEntity> getInmueblesWithoutCorredorForAuthenticatedCorredor() {
+    public List<Long> getInmueblesPendientes() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
-        CorredorEntity corredor = corredorRepository.findCorredorById(currentUserId)
-                .orElseThrow(() -> new SecurityException("User is not authorized or not a corredor"));
+        // Encuentra al corredor basado en el usuario actual
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
 
-        return inmuebleRepository.findByCorredorIsNull();
+        // Retorna la lista de IDs de inmuebles pendientes
+        return corredor.getInmueblesPendientes();
     }
 
+    public List<InmuebleEntity> getInmueblesPendientesCompleta() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encuentra al corredor basado en el usuario actual
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        // Obtener los IDs de inmuebles pendientes
+        List<Long> inmueblesPendientesIds = corredor.getInmueblesPendientes();
+
+        // Obtener la información completa de los inmuebles usando los IDs pendientes
+        return inmuebleRepository.findAllById(inmueblesPendientesIds);
+    }
+
+    public ResponseEntity<String> acceptProperty(Long inmuebleId) {
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encontrar al corredor por el ID del usuario autenticado
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        // Verificar que el inmueble esté en la lista de pendientes del corredor
+        if (!corredor.getInmueblesPendientes().contains(inmuebleId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inmueble not found in pending list.");
+        }
+
+        // Obtener el inmueble por su ID
+        InmuebleEntity inmueble = inmuebleRepository.findById(inmuebleId)
+                .orElseThrow(() -> new EntityNotFoundException("Inmueble not found with ID: " + inmuebleId));
+
+        // Eliminar el inmueble de la lista de pendientes y agregarlo a la lista de inmuebles del corredor
+        corredor.getInmueblesPendientes().remove(inmuebleId);
+        corredor.getInmuebles().add(inmueble);
+        inmueble.setCorredor(corredor); // Asignar el corredor al inmueble
+        corredorRepository.save(corredor);
+        inmuebleRepository.save(inmueble); // Guardar el cambio en el inmueble también
+
+        return ResponseEntity.ok("Inmueble accepted successfully.");
+    }
+
+    public ResponseEntity<String> rejectProperty(Long inmuebleId) {
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encontrar al corredor por el ID del usuario autenticado
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        // Verificar que el inmueble esté en la lista de pendientes del corredor
+        if (!corredor.getInmueblesPendientes().contains(inmuebleId)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Inmueble not found in pending list.");
+        }
+
+        // Eliminar el inmueble de la lista de pendientes
+        corredor.getInmueblesPendientes().remove(inmuebleId);
+        corredorRepository.save(corredor);
+
+        return ResponseEntity.ok("Inmueble rejected successfully.");
+    }
 }

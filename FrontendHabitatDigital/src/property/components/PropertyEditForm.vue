@@ -63,22 +63,24 @@ const saveForm = () => {
             <form class="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="saveForm">
                 <!-- Form fields for property details -->
                 <div class="flex flex-wrap -mx-3 mb-6 justify-center">
+
+                    <div class="w-full px-3">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                            for="disponibility">
+                            Disponibilidad:
+                        </label>
+                        <input v-model="property.disponibility" type="checkbox" id="disponibility" name="disponibility"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    </div>
+
                     <!-- Sale input field -->
-                    <div class="w-full px-3 mb-6 md:mb-0"> 
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"> 
-                            Tipo de propiedad: 
-                        </label> 
-                        <div class="mt-2"> 
-                            <label class="inline-flex items-center"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="true" v-model="property.sale"> 
-                                <span class="ml-2">Venta</span> 
-                            </label> 
-                            <label class="inline-flex items-center ml-6"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="false" v-model="property.sale"> 
-                                <span class="ml-2">Arriendo</span>
-                            </label> 
-                        </div> 
-                    </div> 
+                    <div class="w-full px-3 mb-6 md:mb-0">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="sale">
+                            En venta:
+                        </label>
+                        <input v-model="property.sale" type="checkbox" id="sale" name="sale"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    </div>
 
                     <!-- Price input field -->
                     <div class="w-full px-3">

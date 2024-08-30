@@ -60,6 +60,12 @@ const selectProperty = (property) => {
     router.push('/property');
 };
 
+const editProperty = (property) => {
+    store.dispatch('selectProperty', property);
+    console.log(property);
+    router.push('/editProperty');
+};
+
 onMounted(() => {
     fetchUser();
     if ( user.value.role === 'OWNER' ){
@@ -143,9 +149,14 @@ onMounted(() => {
             </section>
             <section v-if="user.role === 'OWNER'" class="mt-8">
                 <h2 class="text-2xl">Inmuebles:</h2>
-                    <div class="grid grid-cols-4 gap-4">
-                        <PropertyCard v-for="property in properties" :key="property.id" :property @click="selectProperty(property)"/>
+                <div class="grid grid-cols-5 gap-4">
+                    <div v-for="property in properties" :key="property.id" class="flex flex-col items-center">
+                        <PropertyCard :property @click="selectProperty(property)"/>
+                        <button @click="editProperty(property)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-64">
+                        Editar Inmueble
+                        </button>
                     </div>
+                </div>
             </section>
         </div>
     </div>  

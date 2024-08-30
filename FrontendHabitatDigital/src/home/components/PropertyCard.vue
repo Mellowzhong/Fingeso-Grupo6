@@ -8,7 +8,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <figure class="w-64 p-4 relative bg-white rounded-lg shadow-md overflow-hidden m-2">
+    <figure class="w-64 p-4 relative rounded-lg shadow-md overflow-hidden m-2"
+        :class="{ 'bg-white': property.disponibility, 'bg-gray-200': !property.disponibility }">
         <div v-if="property.photos.length === 0">
             <img src="../../Images/noImage.png" alt="Imagen de la propiedad" class="w-52 h-52 object-scale-down mx-auto">
         </div>

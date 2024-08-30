@@ -59,7 +59,7 @@ public class OwnerService {
 
         InmuebleEntity inmueble = new InmuebleEntity();
 
-        inmueble.setDisponibility(inmuebleForm.getSale());
+        inmueble.setDisponibility(Boolean.TRUE);
         inmueble.setPrice(inmuebleForm.getPrice());
         inmueble.setDirection(inmuebleForm.getDirection());
         inmueble.setType(inmuebleForm.getType());

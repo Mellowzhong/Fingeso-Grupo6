@@ -23,6 +23,11 @@ const router = createRouter({
       name: "PropertyRegister",
       component: () => import("../property/views/PropertyRegister.vue"),
     },
+    {
+      path: "/editProperty",
+      name: "EditProperty",
+      component: () => import("../property/views/PropertyEdit.vue"),
+    }
   ],
   linkActiveClass: "active-link",
 });
