@@ -61,6 +61,13 @@ public class InmuebleController {
     public List<InmuebleEntity> getAllInmueble() { return this.inmuebleService.getAllInmuebles();}
 
     /*
+        Descripcion: Este método maneja las solicitudes GET para obtener una lista
+        de todos los inmuebles registrados en el sistema que esten disponibles.
+     */
+    @GetMapping("/allAvailable")
+    public List<InmuebleEntity> getAllInmuebleAvailable() { return this.inmuebleService.getAllinmeblesDisponibles();}
+
+    /*
         Descripcion: Este método maneja las solicitudes POST para crear un nuevo
         inmueble en el sistema. Verifica que el usuario esté autenticado antes
         de permitir la creación del inmueble.
@@ -80,6 +87,12 @@ public class InmuebleController {
 
         // Call to service
         return inmuebleService.addProperty(inmueble, userEmail);
+    }
+
+    @PutMapping
+    public ResponseEntity<InmuebleEntity> updateProfile(@RequestBody InmuebleEntity inmueble){
+        InmuebleEntity newInmueble = inmuebleService.updateInmueble(inmueble);
+        return ResponseEntity.ok(newInmueble);
     }
 
     /*

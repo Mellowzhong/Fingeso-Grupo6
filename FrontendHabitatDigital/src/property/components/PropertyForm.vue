@@ -70,15 +70,15 @@ const saveForm = () => {
                         </label> 
                         <div class="mt-2"> 
                             <label class="inline-flex items-center"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="true" v-model="property.sale"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="true" v-model="property.sale"> 
                                 <span class="ml-2">Venta</span> 
                             </label> 
                             <label class="inline-flex items-center ml-6"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="false" v-model="property.sale"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="false" v-model="property.sale"> 
                                 <span class="ml-2">Arriendo</span>
                             </label> 
                         </div> 
-                    </div> 
+                    </div>
 
                     <!-- Price input field -->
                     <div class="w-full px-3">
