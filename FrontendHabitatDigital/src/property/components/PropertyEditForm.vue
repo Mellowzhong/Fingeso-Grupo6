@@ -74,12 +74,20 @@ const saveForm = () => {
                     </div>
 
                     <!-- Sale input field -->
-                    <div class="w-full px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="sale">
-                            En venta:
-                        </label>
-                        <input v-model="property.sale" type="checkbox" id="sale" name="sale"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                    <div class="w-full px-3 mb-6 md:mb-0"> 
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"> 
+                            Tipo de propiedad: 
+                        </label> 
+                        <div class="mt-2"> 
+                            <label class="inline-flex items-center"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="true" v-model="property.sale"> 
+                                <span class="ml-2">Venta</span> 
+                            </label> 
+                            <label class="inline-flex items-center ml-6"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="false" v-model="property.sale"> 
+                                <span class="ml-2">Arriendo</span>
+                            </label> 
+                        </div> 
                     </div>
 
                     <!-- Price input field -->
@@ -274,7 +282,7 @@ const saveForm = () => {
                 <div class="flex justify-center">
                     <button type="submit" :disabled="propertyFormIsEmpty"
                         class="bg-blue-500 hover:bg-blue-700 disabled:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        {{ isEdit ? 'Guardar cambios' : 'Crear Propiedad' }}
+                        {{ isEdit ? 'Guardar cambios' : 'Editar Propiedad' }}
                     </button>
                 </div>
             </form>

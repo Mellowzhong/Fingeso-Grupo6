@@ -135,5 +135,33 @@ public class InmuebleService {
         });
         return inmueblesDisponibles;
     }
+
+    public InmuebleEntity updateInmueble(InmuebleEntity updatedInmueble) {
+        // Buscar el inmueble por ID
+        InmuebleEntity existingInmueble = inmuebleRepository.findById(updatedInmueble.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Inmueble no encontrado"));
+
+        // Actualizar los campos modificables del inmueble
+        existingInmueble.setDisponibility(updatedInmueble.getDisponibility());
+        existingInmueble.setSale(updatedInmueble.getSale());
+        existingInmueble.setPrice(updatedInmueble.getPrice());
+        existingInmueble.setDirection(updatedInmueble.getDirection());
+        existingInmueble.setType(updatedInmueble.getType());
+        existingInmueble.setRooms(updatedInmueble.getRooms());
+        existingInmueble.setBathrooms(updatedInmueble.getBathrooms());
+        existingInmueble.setSquareMeters(updatedInmueble.getSquareMeters());
+        existingInmueble.setYearConstruction(updatedInmueble.getYearConstruction());
+        existingInmueble.setState(updatedInmueble.getState());
+        existingInmueble.setDescription(updatedInmueble.getDescription());
+        existingInmueble.setPhotos(updatedInmueble.getPhotos());
+        existingInmueble.setServices(updatedInmueble.getServices());
+        existingInmueble.setParking(updatedInmueble.getParking());
+        existingInmueble.setFurnished(updatedInmueble.getFurnished());
+        existingInmueble.setApproved(updatedInmueble.getApproved());
+        existingInmueble.setCorredor(updatedInmueble.getCorredor());
+
+        // Guardar el inmueble actualizado
+        return inmuebleRepository.save(existingInmueble);
+    }
 }
 
