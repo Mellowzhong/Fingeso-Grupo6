@@ -1,6 +1,6 @@
 package com.example.BackendHabitatDigital.controllers;
 
-import com.example.BackendHabitatDigital.Requests.InmuebleRequest;
+import com.example.BackendHabitatDigital.Requests.PropertyRequest;
 import com.example.BackendHabitatDigital.entities.OwnerEntity;
 import com.example.BackendHabitatDigital.services.OwnerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class OwnerController {
         Descripcion: Este método crea un nuevo propietario.
      */
     @PostMapping
-    public ResponseEntity<Object> createPropietario(@RequestBody InmuebleRequest ownerForm) {
+    public ResponseEntity<Object> createPropietario(@RequestBody PropertyRequest ownerForm) {
         return this.ownerService.addOwner(ownerForm);
     }
 

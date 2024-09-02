@@ -1,9 +1,9 @@
 package com.example.BackendHabitatDigital.services;
 
-import com.example.BackendHabitatDigital.Requests.InmuebleRequest;
+import com.example.BackendHabitatDigital.Requests.PropertyRequest;
 import com.example.BackendHabitatDigital.entities.*;
 import com.example.BackendHabitatDigital.repositories.CorredorRepository;
-import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
+import com.example.BackendHabitatDigital.repositories.PropertyRepository;
 import com.example.BackendHabitatDigital.repositories.OwnerRepository;
 import com.example.BackendHabitatDigital.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ import java.util.Optional;
 public class OwnerService {
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
-    private final InmuebleRepository inmuebleRepository;
+    private final PropertyRepository propertyRepository;
 
     private final CorredorRepository corredorRepository;
 
@@ -33,10 +32,10 @@ public class OwnerService {
         para manejar las operaciones relacionadas con propietarios, usuarios, inmuebles y corredores.
      */
     @Autowired
-    public OwnerService(OwnerRepository ownerRepository, UserRepository userRepository, InmuebleRepository inmuebleRepository, CorredorRepository corredorRepository) {
+    public OwnerService(OwnerRepository ownerRepository, UserRepository userRepository, PropertyRepository propertyRepository, CorredorRepository corredorRepository) {
         this.ownerRepository = ownerRepository;
         this.userRepository = userRepository;
-        this.inmuebleRepository = inmuebleRepository;
+        this.propertyRepository = propertyRepository;
         this.corredorRepository = corredorRepository;
     }
 
@@ -46,7 +45,7 @@ public class OwnerService {
         crea una nueva entidad de propietario. Luego, asocia el inmueble con el propietario y, opcionalmente,
         con un corredor si se proporciona el correo electrónico de un corredor.
      */
-    public ResponseEntity<Object> addOwner(InmuebleRequest inmuebleForm) {
+    public ResponseEntity<Object> addOwner(PropertyRequest inmuebleForm) {
         Optional<UserEntity> optionalUser = userRepository.findByUsername(inmuebleForm.getUserEmail());
 
         if (optionalUser.isEmpty()){
@@ -57,11 +56,11 @@ public class OwnerService {
         Optional<OwnerEntity> optionalOwner = ownerRepository.findById(user.getId());
         OwnerEntity owner = new OwnerEntity();
 
-        InmuebleEntity inmueble = new InmuebleEntity();
+        PropertyEntity inmueble = new PropertyEntity();
 
-        inmueble.setDisponibility(Boolean.TRUE);
+        inmueble.setAvailable(Boolean.TRUE);
         inmueble.setPrice(inmuebleForm.getPrice());
-        inmueble.setDirection(inmuebleForm.getDirection());
+        inmueble.setAddress(inmuebleForm.getAddress());
         inmueble.setType(inmuebleForm.getType());
         inmueble.setRooms(inmuebleForm.getRooms());
         inmueble.setBathrooms(inmuebleForm.getBathrooms());
@@ -74,6 +73,7 @@ public class OwnerService {
         inmueble.setFurnished(inmuebleForm.getFurnished());
         inmueble.setApproved(inmuebleForm.getAprobated());
         inmueble.setPhotos(inmuebleForm.getPhotos());
+        inmueble.setSale(inmuebleForm.getSale());
 
         if (optionalOwner.isPresent()){
             owner = optionalOwner.get();
@@ -101,7 +101,7 @@ public class OwnerService {
 
         owner.getInmuebles().add(inmueble);
         ownerRepository.save(owner);  // Esto guardará tanto el owner como el inmueble
-        inmuebleRepository.save(inmueble);
+        propertyRepository.save(inmueble);
 
         if (optionalOwner.isPresent()){
             return new ResponseEntity<>("se guardo con exito en el owner ya existente", HttpStatus.CREATED);

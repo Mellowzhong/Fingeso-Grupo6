@@ -1,9 +1,9 @@
 package com.example.BackendHabitatDigital.controllers;
 
-import com.example.BackendHabitatDigital.entities.InmuebleEntity;
+import com.example.BackendHabitatDigital.entities.PropertyEntity;
 import com.example.BackendHabitatDigital.entities.ProfileEntity;
-import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
-import com.example.BackendHabitatDigital.services.InmuebleService;
+import com.example.BackendHabitatDigital.repositories.PropertyRepository;
+import com.example.BackendHabitatDigital.services.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +19,25 @@ import java.util.Optional;
     Descripcion: Esta clase es un controlador REST que maneja las solicitudes HTTP
     relacionadas con los inmuebles. Define los endpoints para obtener, crear,
     eliminar y gestionar propiedades, así como para interactuar con los perfiles
-    de los propietarios y corredores. Utiliza `InmuebleService` y `InmuebleRepository`
+    de los propietarios y corredores. Utiliza `PropertyService` y `PropertyRepository`
     para manejar la lógica de negocio y las interacciones con la base de datos.
  */
 @RestController
 @RequestMapping(path = "/inmueble")
-public class InmuebleController {
-    private final InmuebleService inmuebleService;
+public class PropertyController {
+    private final PropertyService propertyService;
 
     @Autowired
-    private InmuebleRepository inmuebleRepository;
+    private PropertyRepository propertyRepository;
 
     /*
-        Descripcion: Constructor de la clase `InmuebleController` que inyecta
-        las dependencias necesarias, incluyendo `InmuebleService` para manejar
+        Descripcion: Constructor de la clase `PropertyController` que inyecta
+        las dependencias necesarias, incluyendo `PropertyService` para manejar
         la lógica de negocio.
      */
     @Autowired
-    public InmuebleController(InmuebleService inmuebleService) {
-        this.inmuebleService = inmuebleService;
+    public PropertyController(PropertyService propertyService) {
+        this.propertyService = propertyService;
     }
 
 
@@ -47,8 +47,8 @@ public class InmuebleController {
         del inmueble; de lo contrario, devuelve una respuesta 404 (Not Found).
      */
     @GetMapping("/{id}")
-    public ResponseEntity<InmuebleEntity> getInmueble(@PathVariable Long id) {
-        Optional<InmuebleEntity> inmueble = inmuebleRepository.findById(id);
+    public ResponseEntity<PropertyEntity> getInmueble(@PathVariable Long id) {
+        Optional<PropertyEntity> inmueble = propertyRepository.findById(id);
         return inmueble.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -58,14 +58,14 @@ public class InmuebleController {
         de todos los inmuebles registrados en el sistema.
      */
     @GetMapping
-    public List<InmuebleEntity> getAllInmueble() { return this.inmuebleService.getAllInmuebles();}
+    public List<PropertyEntity> getAllInmueble() { return this.propertyService.getAllInmuebles();}
 
     /*
         Descripcion: Este método maneja las solicitudes GET para obtener una lista
         de todos los inmuebles registrados en el sistema que esten disponibles.
      */
     @GetMapping("/allAvailable")
-    public List<InmuebleEntity> getAllInmuebleAvailable() { return this.inmuebleService.getAllinmeblesDisponibles();}
+    public List<PropertyEntity> getAllInmuebleAvailable() { return this.propertyService.getAllinmeblesDisponibles();}
 
     /*
         Descripcion: Este método maneja las solicitudes POST para crear un nuevo
@@ -73,7 +73,7 @@ public class InmuebleController {
         de permitir la creación del inmueble.
      */
     @PostMapping("/add")
-    public ResponseEntity<?> createInmueble(@RequestBody InmuebleEntity inmueble) {
+    public ResponseEntity<?> createInmueble(@RequestBody PropertyEntity inmueble) {
         // Authenticate
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -86,12 +86,12 @@ public class InmuebleController {
         String userEmail = authentication.getName();
 
         // Call to service
-        return inmuebleService.addProperty(inmueble, userEmail);
+        return propertyService.addProperty(inmueble, userEmail);
     }
 
     @PutMapping
-    public ResponseEntity<InmuebleEntity> updateProfile(@RequestBody InmuebleEntity inmueble){
-        InmuebleEntity newInmueble = inmuebleService.updateInmueble(inmueble);
+    public ResponseEntity<PropertyEntity> updateProfile(@RequestBody PropertyEntity inmueble){
+        PropertyEntity newInmueble = propertyService.updateInmueble(inmueble);
         return ResponseEntity.ok(newInmueble);
     }
 
@@ -100,7 +100,7 @@ public class InmuebleController {
      */
     @DeleteMapping("/{inmuebleId}")
     public ResponseEntity<Object> deleteProduct(@PathVariable Long inmuebleId) {
-        return this.inmuebleService.deleteInmueble(inmuebleId);
+        return this.propertyService.deleteInmueble(inmuebleId);
     }
 
     /*
@@ -108,15 +108,15 @@ public class InmuebleController {
      */
     @GetMapping("/profileO/{inmuebleId}")
     public ProfileEntity getOwnerProfileFromInmueble(@PathVariable Long inmuebleId) {
-        return this.inmuebleService.getOwnerProfile(inmuebleId);
+        return this.propertyService.getOwnerProfile(inmuebleId);
     }
 
     /*
         Descripcion: metodo que obtiene todos los inmuebles a partir de un propietario
      */
     @GetMapping("/testing/{userId}")
-    public List<InmuebleEntity> getAllInmueblesByOwner(@PathVariable Long userId) {
-        return this.inmuebleService.findAllInmueblesByOwner(userId);
+    public List<PropertyEntity> getAllInmueblesByOwner(@PathVariable Long userId) {
+        return this.propertyService.findAllInmueblesByOwner(userId);
     }
 
     /*
@@ -132,7 +132,7 @@ public class InmuebleController {
             @PathVariable Long inmuebleId,
             @PathVariable Long corredorId) {
 
-        return inmuebleService.requestCorredorToInmueble(inmuebleId, corredorId);
+        return propertyService.requestCorredorToInmueble(inmuebleId, corredorId);
     }
 
 }

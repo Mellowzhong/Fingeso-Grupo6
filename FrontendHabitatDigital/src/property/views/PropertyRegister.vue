@@ -12,10 +12,10 @@ const user = computed(() => store.getters.getUsuario);
 
 const property = ref({
     userEmail: user.value.username,
-    disponibility: true,
+    available: true,
     sale: false,
     price: '',
-    direction: '',
+    address: '',
     type: '',
     rooms: '',
     bathrooms: '',
