@@ -104,7 +104,7 @@ onMounted(async () => {
                 </section>
                 <section>
                     <h2 class="text-2xl">Dirección:</h2>
-                    <p>{{ property.direction }}</p>
+                    <p>{{ property.address }}</p>
                 </section>
                 <section>
                     <h2 class="text-2xl">Precio:</h2>

@@ -1,7 +1,6 @@
 package com.example.BackendHabitatDigital.entities;
 
 
-import com.example.BackendHabitatDigital.repositories.OwnerRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +14,7 @@ import java.util.List;
     Descripcion: Esta clase representa la entidad `OwnerEntity` que se almacena en la base de datos
     en la tabla `owner`. La entidad `OwnerEntity` está asociada a un usuario específico a través
     de una relación de uno a uno con la entidad `UserEntity` y tiene una relación de uno a muchos
-    con la entidad `InmuebleEntity`, lo que representa los inmuebles que posee el propietario.
+    con la entidad `PropertyEntity`, lo que representa los inmuebles que posee el propietario.
  */
 @Entity
 @Data
@@ -45,10 +44,10 @@ public class OwnerEntity{
     private UserEntity user;
 
     /*
-        Descripcion: Relación uno a muchos con la entidad `InmuebleEntity`, representando
+        Descripcion: Relación uno a muchos con la entidad `PropertyEntity`, representando
         que un propietario puede poseer múltiples inmuebles. Esta relación está mapeada
-        a través del campo `owner` en `InmuebleEntity`.
+        a través del campo `owner` en `PropertyEntity`.
      */
     @OneToMany(mappedBy = "owner")
-    private List<InmuebleEntity> inmuebles = new ArrayList<>();
+    private List<PropertyEntity> inmuebles = new ArrayList<>();
 }

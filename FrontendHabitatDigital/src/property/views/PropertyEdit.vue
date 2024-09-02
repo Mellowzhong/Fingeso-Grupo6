@@ -26,6 +26,6 @@ const saveProperty = async () => {
 
 <template>
     <div>
-        <PropertyEditForm :property="property" @save="saveProperty" :isEdit="false" />
+        <PropertyEditForm :property="property" @save="saveProperty" :isEdit="true" />
     </div>
 </template>
