@@ -71,7 +71,7 @@ public class CorredorService {
         // Retornar la lista de inmuebles asignados
         return corredor.getInmuebles();
     }
-    public List<Long> getInmueblesPendientes() {
+    /*public List<Long> getInmueblesPendientes() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
@@ -81,9 +81,9 @@ public class CorredorService {
 
         // Retorna la lista de IDs de inmuebles pendientes
         return corredor.getInmueblesPendientes();
-    }
+    }*/
 
-    public List<PropertyEntity> getInmueblesPendientesCompleta() {
+    /*public List<PropertyEntity> getInmueblesPendientesCompleta() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
@@ -96,6 +96,17 @@ public class CorredorService {
 
         // Obtener la información completa de los inmuebles usando los IDs pendientes
         return propertyRepository.findAllById(inmueblesPendientesIds);
+    }*/
+
+    public List<PropertyEntity> getInmueblesPendientesCompleta() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encuentra al corredor basado en el usuario actual
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        return corredor.getInmueblesPendientes();
     }
 
     public ResponseEntity<String> acceptProperty(Long inmuebleId) {

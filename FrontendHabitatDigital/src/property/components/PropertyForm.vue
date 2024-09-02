@@ -9,6 +9,10 @@ const props = defineProps({
     isEdit: {
         type: Boolean,
         default: false
+    },
+    corredorList: {
+        type: Array,
+        default: []
     }
 });
 
@@ -46,6 +50,7 @@ const removeImage = (index) => {
 const emits = defineEmits(['save']);
 
 const saveForm = () => {
+    console.log('Saving property', props.property);
     emits('save');
 };
 </script>
@@ -256,13 +261,13 @@ const saveForm = () => {
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="corredorSelect">
                             Seleccionar Corredor:
-                            <select v-model="property.corredor" id="corredorSelect" name="corredorSelect"
-                                placeholder="Seleccione un corredor"
-                                class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">Seleccione un corredor</option>
-                                <option value="Corredor 1">Corredor 1</option>
-                                <option value="Corredor 2">Corredor 2</option>
-                                <option value="Corredor 3">Corredor 3</option>
+                            <select id="corredorSelect" name="corredorSelect"
+                                    placeholder="Seleccione un corredor"
+                                    class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option value="">Seleccione un corredor</option>
+                            <option v-for="corredor in corredorList" :value="corredor.user.username" :key="corredor.user.username">
+                                {{ corredor.user.username }}
+                            </option>
                             </select>
                         </label>
                     </div>

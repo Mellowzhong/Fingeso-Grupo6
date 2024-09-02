@@ -52,8 +52,7 @@ public class CorredorEntity {
     private List<PropertyEntity> inmuebles = new ArrayList<>();
 
     // Nueva lista de IDs de inmuebles pendientes de aceptación
-    @ElementCollection
-    @CollectionTable(name = "corredor_inmuebles_pendientes", joinColumns = @JoinColumn(name = "corredor_id"))
-    @Column(name = "inmueble_id")
-    private List<Long> inmueblesPendientes = new ArrayList<>();
+    @OneToMany(mappedBy = "corredor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PropertyEntity> inmueblesPendientes = new ArrayList<>();
 }

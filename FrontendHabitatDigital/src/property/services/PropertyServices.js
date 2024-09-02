@@ -45,3 +45,12 @@ export const getOwnerProfile = async (inmuebleId) => {
     return { success: false, data: error };
   }
 };
+
+export const getCorredorList = async () => {
+  try {
+    const response = await api.get("/corredor");
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, data: error };
+  }
+}
