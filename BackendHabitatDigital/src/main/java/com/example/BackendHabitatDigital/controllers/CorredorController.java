@@ -57,8 +57,8 @@ public class CorredorController {
         corredor en el sistema utilizando un correo electrónico. La creación del
         corredor es gestionada por el servicio `CorredorService`.
      */
-    @PostMapping
-    public ResponseEntity<Object> createCorredor(@RequestBody String email) {
+    @PostMapping("/{email}")
+    public ResponseEntity<Object> createCorredor(@PathVariable String email) {
         return this.corredorService.addCorredor(email);
     }
 
