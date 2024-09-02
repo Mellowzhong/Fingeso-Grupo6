@@ -75,7 +75,7 @@ public class PropertyService {
     }
 
     public List<PropertyEntity> findAllInmueblesByOwner(long userId) {
-        Optional<OwnerEntity> owner = ownerRepository.findById(userId);
+        Optional<OwnerEntity> owner = ownerRepository.findByUserId(userId);
         return owner.map(value -> this.propertyRepository.findAllByOwner(value).orElse(List.of())).orElse(List.of());
     }
 
@@ -108,7 +108,7 @@ public class PropertyService {
                 .orElseThrow(() -> new EntityNotFoundException("Corredor not found with ID: " + corredorId));
 
         // Agregar el ID del inmueble a la lista de inmuebles pendientes del corredor SIN cambiar el corredor_id del inmueble
-        corredor.getInmueblesPendientes().add(inmueble.getId());
+        //corredor.getInmueblesPendientes().add(inmueble.getId());
 
         // Guardar el corredor con la lista de inmuebles pendientes actualizada
         corredorRepository.save(corredor);
