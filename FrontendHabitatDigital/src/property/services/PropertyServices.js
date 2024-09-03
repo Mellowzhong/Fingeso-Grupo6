@@ -54,3 +54,13 @@ export const getCorredorList = async () => {
     return { success: false, data: error };
   }
 }
+
+export const deleteProperty = async (inmuebleId) => {
+  try {
+    const response = await api.delete(`/inmueble/${inmuebleId}`);
+    location.reload();
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, data: error };
+  }
+};
