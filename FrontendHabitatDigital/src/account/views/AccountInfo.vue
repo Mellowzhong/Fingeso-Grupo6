@@ -13,7 +13,7 @@ const user = computed(() => store.getters.getUsuario);
 const showImageInput = ref(false);
 const showDescriptionInput = ref(false);
 const properties = ref([]);
-const showConfirmation = ref(false);
+const confirmations = ref({});
 
 const updateUser = async () => {
     console.log(user.value)
@@ -154,19 +154,19 @@ onMounted(() => {
                     <div v-for="property in properties" :key="property.id" class="flex flex-col items-center">
                         <PropertyCard :property @click="selectProperty(property)"/>
                         <button @click="editProperty(property)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-64">
-                        Editar Inmueble
+                            Editar Inmueble
                         </button>
                         <div>
-                            <button v-if="!showConfirmation" @click="showConfirmation = true" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 focus:outline-none focus:shadow-outline w-64">
+                            <button v-if="!confirmations[property.id]" @click="confirmations[property.id] = true" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 focus:outline-none focus:shadow-outline w-64">
                             Eliminar Inmueble
                             </button>
 
-                            <div v-if="showConfirmation" class="mt-4">
+                            <div v-if="confirmations[property.id]" class="mt-4">
                             <p>¿Estás seguro de que deseas eliminar este inmueble?</p>
                             <button @click="deleteProperty(property.id)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Confirmar
                             </button>
-                            <button @click="showConfirmation = false" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            <button @click="confirmations[property.id] = false" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                                 Cancelar
                             </button>
                             </div>
