@@ -9,6 +9,10 @@ const props = defineProps({
     isEdit: {
         type: Boolean,
         default: false
+    },
+    corredorList: {
+        type: Array,
+        default: []
     }
 });
 
@@ -18,7 +22,7 @@ const showCorredores = ref(false);
 const propertyFormIsEmpty = computed(() => {
     return (
         props.property.price === '' ||
-        props.property.direction === '' ||
+        props.property.address === '' ||
         props.property.type === '' ||
         props.property.rooms === '' ||
         props.property.bathrooms === '' ||
@@ -46,6 +50,7 @@ const removeImage = (index) => {
 const emits = defineEmits(['save']);
 
 const saveForm = () => {
+    console.log('Saving property', props.property);
     emits('save');
 };
 </script>
@@ -70,15 +75,15 @@ const saveForm = () => {
                         </label> 
                         <div class="mt-2"> 
                             <label class="inline-flex items-center"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="true" v-model="property.sale"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="true" v-model="property.sale"> 
                                 <span class="ml-2">Venta</span> 
                             </label> 
                             <label class="inline-flex items-center ml-6"> 
-                                <input type="radio" class="form-radio" name="propertyType" value="false" v-model="property.sale"> 
+                                <input type="radio" class="form-radio" name="propertyType" :value="false" v-model="property.sale"> 
                                 <span class="ml-2">Arriendo</span>
                             </label> 
                         </div> 
-                    </div> 
+                    </div>
 
                     <!-- Price input field -->
                     <div class="w-full px-3">
@@ -89,13 +94,13 @@ const saveForm = () => {
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     </div>
 
-                    <!-- Direction input field -->
+                    <!-- Address input field -->
                     <div class="w-full px-3">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                            for="direction">
+                            for="address">
                             Dirección:
                         </label>
-                        <input v-model="property.direction" type="text" id="direction" name="direction"
+                        <input v-model="property.address" type="text" id="address" name="address"
                             placeholder="Calle Falsa 123"
                             class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                     </div>
@@ -256,13 +261,13 @@ const saveForm = () => {
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                             for="corredorSelect">
                             Seleccionar Corredor:
-                            <select v-model="property.corredor" id="corredorSelect" name="corredorSelect"
-                                placeholder="Seleccione un corredor"
-                                class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                                <option value="">Seleccione un corredor</option>
-                                <option value="Corredor 1">Corredor 1</option>
-                                <option value="Corredor 2">Corredor 2</option>
-                                <option value="Corredor 3">Corredor 3</option>
+                            <select id="corredorSelect" name="corredorSelect"
+                                    placeholder="Seleccione un corredor"
+                                    class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option value="">Seleccione un corredor</option>
+                            <option v-for="corredor in corredorList" :value="corredor.user.username" :key="corredor.user.username">
+                                {{ corredor.user.username }}
+                            </option>
                             </select>
                         </label>
                     </div>

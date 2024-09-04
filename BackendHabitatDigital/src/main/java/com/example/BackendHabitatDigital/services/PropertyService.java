@@ -2,7 +2,7 @@ package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.*;
 import com.example.BackendHabitatDigital.repositories.CorredorRepository;
-import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
+import com.example.BackendHabitatDigital.repositories.PropertyRepository;
 import com.example.BackendHabitatDigital.repositories.OwnerRepository;
 import com.example.BackendHabitatDigital.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,22 +16,22 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class InmuebleService {
+public class PropertyService {
 
-    private final InmuebleRepository inmuebleRepository;
+    private final PropertyRepository propertyRepository;
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
     private final CorredorRepository corredorRepository;
 
     @Autowired
-    public InmuebleService(InmuebleRepository inmuebleRepository, UserRepository userRepository, OwnerRepository ownerRepository, CorredorRepository corredorRepository) {
-        this.inmuebleRepository = inmuebleRepository;
+    public PropertyService(PropertyRepository propertyRepository, UserRepository userRepository, OwnerRepository ownerRepository, CorredorRepository corredorRepository) {
+        this.propertyRepository = propertyRepository;
         this.userRepository = userRepository;
         this.ownerRepository = ownerRepository;
         this.corredorRepository = corredorRepository;
     }
 
-    public ResponseEntity<InmuebleEntity> addProperty(InmuebleEntity inmueble, String userEmail) {
+    public ResponseEntity<PropertyEntity> addProperty(PropertyEntity inmueble, String userEmail) {
         Optional<UserEntity> userOptional = userRepository.findByUsername(userEmail);
 
         if (userOptional.isPresent()) {
@@ -52,7 +52,7 @@ public class InmuebleService {
                     });
 
             inmueble.setOwner(owner); // Asignar el propietario al inmueble
-            inmuebleRepository.save(inmueble); // Guardar el inmueble en la base de datos
+            propertyRepository.save(inmueble); // Guardar el inmueble en la base de datos
             return new ResponseEntity<>(inmueble, HttpStatus.CREATED);
         }
 
@@ -61,26 +61,26 @@ public class InmuebleService {
 
 
 
-    public List<InmuebleEntity> getAllInmuebles() {
-        return this.inmuebleRepository.findAll();
+    public List<PropertyEntity> getAllInmuebles() {
+        return this.propertyRepository.findAll();
     }
 
-    public Optional<InmuebleEntity> getInmuebleById(long inmuebleId) {
-        return this.inmuebleRepository.findById(inmuebleId);
+    public Optional<PropertyEntity> getInmuebleById(long inmuebleId) {
+        return this.propertyRepository.findById(inmuebleId);
     }
 
     public ResponseEntity<Object> deleteInmueble(long inmuebleId) {
-        this.inmuebleRepository.deleteById(inmuebleId);
+        this.propertyRepository.deleteById(inmuebleId);
         return new ResponseEntity<>("Se eliminó con éxito", HttpStatus.OK);
     }
 
-    public List<InmuebleEntity> findAllInmueblesByOwner(long userId) {
-        Optional<OwnerEntity> owner = ownerRepository.findById(userId);
-        return owner.map(value -> this.inmuebleRepository.findAllByOwner(value).orElse(List.of())).orElse(List.of());
+    public List<PropertyEntity> findAllInmueblesByOwner(long userId) {
+        Optional<OwnerEntity> owner = ownerRepository.findByUserId(userId);
+        return owner.map(value -> this.propertyRepository.findAllByOwner(value).orElse(List.of())).orElse(List.of());
     }
 
     public ProfileEntity getOwnerProfile(long inmuebleId) {
-        Optional<InmuebleEntity> inmuebleO = inmuebleRepository.findById(inmuebleId);
+        Optional<PropertyEntity> inmuebleO = propertyRepository.findById(inmuebleId);
         return inmuebleO.map(inmueble -> inmueble.getOwner().getUser().getProfile()).orElse(null);
     }
 
@@ -95,7 +95,7 @@ public class InmuebleService {
                 .orElseThrow(() -> new SecurityException("User is not authorized or not an owner"));
 
         // Obtener el inmueble por su ID
-        InmuebleEntity inmueble = inmuebleRepository.findById(inmuebleId)
+        PropertyEntity inmueble = propertyRepository.findById(inmuebleId)
                 .orElseThrow(() -> new EntityNotFoundException("Inmueble not found with ID: " + inmuebleId));
 
         // Verificar que el usuario autenticado es el propietario del inmueble
@@ -108,7 +108,7 @@ public class InmuebleService {
                 .orElseThrow(() -> new EntityNotFoundException("Corredor not found with ID: " + corredorId));
 
         // Agregar el ID del inmueble a la lista de inmuebles pendientes del corredor SIN cambiar el corredor_id del inmueble
-        corredor.getInmueblesPendientes().add(inmueble.getId());
+        //corredor.getInmueblesPendientes().add(inmueble.getId());
 
         // Guardar el corredor con la lista de inmuebles pendientes actualizada
         corredorRepository.save(corredor);
@@ -119,21 +119,49 @@ public class InmuebleService {
     /*
         Descripcion: Este método obtiene todos los inmuebles que se encuentran disponibles
     */
-    public List<InmuebleEntity> getAllinmeblesDisponibles(){
-        List<InmuebleEntity> inmuebles = this.getAllInmuebles();
-        List<InmuebleEntity> inmueblesDisponibles = new ArrayList<>();
-        for (InmuebleEntity inmueble : inmuebles){
-            if (inmueble.getDisponibility() == true){
+    public List<PropertyEntity> getAllinmeblesDisponibles(){
+        List<PropertyEntity> inmuebles = this.getAllInmuebles();
+        List<PropertyEntity> inmueblesDisponibles = new ArrayList<>();
+        for (PropertyEntity inmueble : inmuebles){
+            if (inmueble.getAvailable() == true){
                 inmueblesDisponibles.add(inmueble);
             }
         }
-        Collections.sort(inmueblesDisponibles, new Comparator<InmuebleEntity>() {
+        Collections.sort(inmueblesDisponibles, new Comparator<PropertyEntity>() {
             @Override
-            public int compare(InmuebleEntity i1, InmuebleEntity i2) {
+            public int compare(PropertyEntity i1, PropertyEntity i2) {
                 return i2.getId().compareTo(i1.getId()); // from highest to lowest ID
             }
         });
         return inmueblesDisponibles;
+    }
+
+    public PropertyEntity updateInmueble(PropertyEntity updatedInmueble) {
+        // Buscar el inmueble por ID
+        PropertyEntity existingInmueble = propertyRepository.findById(updatedInmueble.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Inmueble no encontrado"));
+
+        // Actualizar los campos modificables del inmueble
+        existingInmueble.setAvailable(updatedInmueble.getAvailable());
+        existingInmueble.setSale(updatedInmueble.getSale());
+        existingInmueble.setPrice(updatedInmueble.getPrice());
+        existingInmueble.setAddress(updatedInmueble.getAddress());
+        existingInmueble.setType(updatedInmueble.getType());
+        existingInmueble.setRooms(updatedInmueble.getRooms());
+        existingInmueble.setBathrooms(updatedInmueble.getBathrooms());
+        existingInmueble.setSquareMeters(updatedInmueble.getSquareMeters());
+        existingInmueble.setYearConstruction(updatedInmueble.getYearConstruction());
+        existingInmueble.setState(updatedInmueble.getState());
+        existingInmueble.setDescription(updatedInmueble.getDescription());
+        existingInmueble.setPhotos(updatedInmueble.getPhotos());
+        existingInmueble.setServices(updatedInmueble.getServices());
+        existingInmueble.setParking(updatedInmueble.getParking());
+        existingInmueble.setFurnished(updatedInmueble.getFurnished());
+        existingInmueble.setApproved(updatedInmueble.getApproved());
+        existingInmueble.setCorredor(updatedInmueble.getCorredor());
+
+        // Guardar el inmueble actualizado
+        return propertyRepository.save(existingInmueble);
     }
 }
 

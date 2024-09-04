@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import { register } from '../services/UserServices';
+import { register, registerCorredor } from '../services/UserServices';
 import { useCookies } from 'vue3-cookies';
 import { ACCESS_TOKEN } from '../../utilities/constants/constants';
+import VueJwtDecode from 'vue-jwt-decode';
 
 const props = defineProps({
     onClose: {
@@ -12,7 +13,7 @@ const props = defineProps({
     changeToLoginForm: {
         type: Function,
         required: true,
-    }
+    },
 });
 
 const { cookies } = useCookies();
@@ -24,6 +25,8 @@ const user = ref({
     lastname: '',
     contact: '',
 })
+
+const isCorredor = ref(false);
 
 const roles = [
     { name: 'Usuario', value: 'user' },
@@ -45,16 +48,34 @@ const signUp = async () => {
     const user_copy = { ...user.value }
     user_copy.contact = '+56' + user_copy.contact
     console.log(user_copy)
-    const response = await register(user_copy);
-    if (response.success == true) {
+    if (isCorredor.value) {
+        //Logica para el register de inmueble
+        const response = await register(user_copy);
         console.log(response.data);
         cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
-        console.log('Usuario creado con éxito');
         clearUser();
         props.onClose();
         props.changeToLoginForm();
+        const decodedToken = VueJwtDecode.decode(response.data.token);
+        console.log(decodedToken)
+        const response2 = await registerCorredor(decodedToken.sub);
+        if (response2.success == true) {
+            console.log(response2.data);
+        } else {
+            console.log('Error al crear corredor');
+        }
     } else {
-        console.log('Error al crear usuario');
+        const response = await register(user_copy);
+        if (response.success == true) {
+            console.log(response.data);
+            cookies.set(ACCESS_TOKEN, response.data.token, { expires: '1d' });
+            console.log('Usuario creado con éxito');
+            clearUser();
+            props.onClose();
+            props.changeToLoginForm();
+        } else {
+            console.log('Error al crear usuario');
+        }
     }
 }
 
@@ -92,15 +113,11 @@ const signUp = async () => {
                     class="w-full border rounded-r-lg pl-2 py-1" v-model="user.contact">
             </div>
         </label>
-        <!-- <label for="">
-            <p class="text-sm ml-2 mb-1">Rol:</p>
-            <div class="flex justify-between px-2">
-                <div v-for="role in roles" class="">
-                    <input type="radio" :key="role.value" name="role" :value="role.value">
-                    {{ role.name }}
-                </div>
-            </div>
-        </label> -->
+        <div class="flex justify-center">
+            <label>
+                <input type="checkbox" v-model="isCorredor" class="mr-2"> Corredor de Inmuebles
+            </label>
+        </div>
         <button class="bg-teal-400 p-1 rounded">Registrarse</button>
     </form>
 </template>

@@ -15,7 +15,7 @@ import java.util.List;
     Descripcion: Esta clase representa la entidad `CorredorEntity` que se almacena en la base de datos
     en la tabla `corredor`. La entidad `CorredorEntity` está asociada a un usuario específico a través
     de una relación de uno a uno con la entidad `UserEntity` y tiene una relación de uno a muchos
-    con la entidad `InmuebleEntity`, lo que representa los inmuebles gestionados por el corredor.
+    con la entidad `PropertyEntity`, lo que representa los inmuebles gestionados por el corredor.
  */
 @Entity
 @Data
@@ -49,11 +49,10 @@ public class CorredorEntity {
     // Lista de inmuebles oficialmente asignados al corredor
     @OneToMany(mappedBy = "corredor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<InmuebleEntity> inmuebles = new ArrayList<>();
+    private List<PropertyEntity> inmuebles = new ArrayList<>();
 
     // Nueva lista de IDs de inmuebles pendientes de aceptación
-    @ElementCollection
-    @CollectionTable(name = "corredor_inmuebles_pendientes", joinColumns = @JoinColumn(name = "corredor_id"))
-    @Column(name = "inmueble_id")
-    private List<Long> inmueblesPendientes = new ArrayList<>();
+    @OneToMany(mappedBy = "corredor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<PropertyEntity> inmueblesPendientes = new ArrayList<>();
 }

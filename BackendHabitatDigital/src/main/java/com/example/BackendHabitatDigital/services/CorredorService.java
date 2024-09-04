@@ -1,11 +1,11 @@
 package com.example.BackendHabitatDigital.services;
 
 import com.example.BackendHabitatDigital.entities.CorredorEntity;
-import com.example.BackendHabitatDigital.entities.InmuebleEntity;
+import com.example.BackendHabitatDigital.entities.PropertyEntity;
 import com.example.BackendHabitatDigital.entities.RoleEntity;
 import com.example.BackendHabitatDigital.entities.UserEntity;
 import com.example.BackendHabitatDigital.repositories.CorredorRepository;
-import com.example.BackendHabitatDigital.repositories.InmuebleRepository;
+import com.example.BackendHabitatDigital.repositories.PropertyRepository;
 import com.example.BackendHabitatDigital.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CorredorService {
     private final CorredorRepository corredorRepository;
     private final UserRepository userRepository;
-    private final InmuebleRepository inmuebleRepository;
+    private final PropertyRepository propertyRepository;
 
     @Autowired
-    public CorredorService(CorredorRepository corredorRepository, UserRepository userRepository, InmuebleRepository inmuebleRepository) {
+    public CorredorService(CorredorRepository corredorRepository, UserRepository userRepository, PropertyRepository propertyRepository) {
         this.corredorRepository = corredorRepository;
         this.userRepository = userRepository;
-        this.inmuebleRepository = inmuebleRepository;
+        this.propertyRepository = propertyRepository;
     }
 
     public ResponseEntity<Object> addCorredor(String email) {
@@ -60,7 +59,7 @@ public class CorredorService {
     }
 
     // Todos los inmuebles asignados del corredor
-    public List<InmuebleEntity> getAssignedProperties() {
+    public List<PropertyEntity> getAssignedProperties() {
         // Obtener el usuario autenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
@@ -72,7 +71,7 @@ public class CorredorService {
         // Retornar la lista de inmuebles asignados
         return corredor.getInmuebles();
     }
-    public List<Long> getInmueblesPendientes() {
+    /*public List<Long> getInmueblesPendientes() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
@@ -82,9 +81,9 @@ public class CorredorService {
 
         // Retorna la lista de IDs de inmuebles pendientes
         return corredor.getInmueblesPendientes();
-    }
+    }*/
 
-    public List<InmuebleEntity> getInmueblesPendientesCompleta() {
+    /*public List<PropertyEntity> getInmueblesPendientesCompleta() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
 
@@ -96,7 +95,18 @@ public class CorredorService {
         List<Long> inmueblesPendientesIds = corredor.getInmueblesPendientes();
 
         // Obtener la información completa de los inmuebles usando los IDs pendientes
-        return inmuebleRepository.findAllById(inmueblesPendientesIds);
+        return propertyRepository.findAllById(inmueblesPendientesIds);
+    }*/
+
+    public List<PropertyEntity> getInmueblesPendientesCompleta() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = ((UserEntity) authentication.getPrincipal()).getId();
+
+        // Encuentra al corredor basado en el usuario actual
+        CorredorEntity corredor = corredorRepository.findCorredorByUserId(currentUserId)
+                .orElseThrow(() -> new EntityNotFoundException("Corredor with user ID " + currentUserId + " not found"));
+
+        return corredor.getInmueblesPendientes();
     }
 
     public ResponseEntity<String> acceptProperty(Long inmuebleId) {
@@ -114,7 +124,7 @@ public class CorredorService {
         }
 
         // Obtener el inmueble por su ID
-        InmuebleEntity inmueble = inmuebleRepository.findById(inmuebleId)
+        PropertyEntity inmueble = propertyRepository.findById(inmuebleId)
                 .orElseThrow(() -> new EntityNotFoundException("Inmueble not found with ID: " + inmuebleId));
 
         // Eliminar el inmueble de la lista de pendientes y agregarlo a la lista de inmuebles del corredor
@@ -122,7 +132,7 @@ public class CorredorService {
         corredor.getInmuebles().add(inmueble);
         inmueble.setCorredor(corredor); // Asignar el corredor al inmueble
         corredorRepository.save(corredor);
-        inmuebleRepository.save(inmueble); // Guardar el cambio en el inmueble también
+        propertyRepository.save(inmueble); // Guardar el cambio en el inmueble también
 
         return ResponseEntity.ok("Inmueble accepted successfully.");
     }

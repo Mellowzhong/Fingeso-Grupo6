@@ -8,6 +8,7 @@ import { RouterLink } from 'vue-router';
 const isAccountAuthModalOpen = ref(false);
 const store = useStore();
 const usuario = computed(() => store.getters.getUsuario);
+const corredor = false;
 
 const handleIsAccountAuthModalOpen = () => {
     isAccountAuthModalOpen.value = !isAccountAuthModalOpen.value;
@@ -42,6 +43,6 @@ const handleIsAccountAuthModalOpen = () => {
         <AccountAuthModal v-if="!usuario" v-model:isOpen="isAccountAuthModalOpen"
             v-model:onClose="handleIsAccountAuthModalOpen" />
         <AccountNavModal v-else v-model:isOpen="isAccountAuthModalOpen"
-        v-model:onClose="handleIsAccountAuthModalOpen"/>
+            v-model:onClose="handleIsAccountAuthModalOpen" />
     </header>
 </template>

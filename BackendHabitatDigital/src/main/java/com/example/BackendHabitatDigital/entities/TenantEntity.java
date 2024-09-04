@@ -30,13 +30,13 @@ public class TenantEntity {
     private Long id;
 
     /*
-        Descripcion: Relación uno a uno con la entidad `InmuebleEntity`, representando que cada
+        Descripcion: Relación uno a uno con la entidad `PropertyEntity`, representando que cada
         arrendatario está asociado a un único inmueble. La columna `inmueble_id` en la tabla
-        `tenant` se utiliza como clave externa para referenciar la entidad `InmuebleEntity`.
+        `tenant` se utiliza como clave externa para referenciar la entidad `PropertyEntity`.
      */
     @OneToOne
     @JoinColumn(name = "inmueble_id")
-    private InmuebleEntity inmueble;
+    private PropertyEntity inmueble;
 
     /*
         Descripcion: Relación uno a uno con la entidad `UserEntity`, representando que cada

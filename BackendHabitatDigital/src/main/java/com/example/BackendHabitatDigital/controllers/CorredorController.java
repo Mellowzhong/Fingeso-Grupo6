@@ -1,7 +1,7 @@
 package com.example.BackendHabitatDigital.controllers;
 
 import com.example.BackendHabitatDigital.entities.CorredorEntity;
-import com.example.BackendHabitatDigital.entities.InmuebleEntity;
+import com.example.BackendHabitatDigital.entities.PropertyEntity;
 import com.example.BackendHabitatDigital.services.CorredorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -57,14 +57,14 @@ public class CorredorController {
         corredor en el sistema utilizando un correo electrónico. La creación del
         corredor es gestionada por el servicio `CorredorService`.
      */
-    @PostMapping
-    public ResponseEntity<Object> createCorredor(@RequestBody String email) {
+    @PostMapping("/{email}")
+    public ResponseEntity<Object> createCorredor(@PathVariable String email) {
         return this.corredorService.addCorredor(email);
     }
 
     @GetMapping("/inmuebles")
-    public ResponseEntity<List<InmuebleEntity>> obtenerInmueblesAsignados() {
-        List<InmuebleEntity> inmueblesAsignados = corredorService.getAssignedProperties();
+    public ResponseEntity<List<PropertyEntity>> obtenerInmueblesAsignados() {
+        List<PropertyEntity> inmueblesAsignados = corredorService.getAssignedProperties();
         return ResponseEntity.ok(inmueblesAsignados);
     }
 
@@ -75,8 +75,8 @@ public class CorredorController {
 
  */
     @GetMapping("/inmuebles/requests")
-    public ResponseEntity<List<InmuebleEntity>> getInmueblesPendientesCompleta() {
-        List<InmuebleEntity> inmueblesPendientes = corredorService.getInmueblesPendientesCompleta();
+    public ResponseEntity<List<PropertyEntity>> getInmueblesPendientesCompleta() {
+        List<PropertyEntity> inmueblesPendientes = corredorService.getInmueblesPendientesCompleta();
         return ResponseEntity.ok(inmueblesPendientes);
     }
 

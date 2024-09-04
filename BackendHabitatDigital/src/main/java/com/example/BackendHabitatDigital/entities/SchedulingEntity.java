@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -15,7 +14,7 @@ import java.util.Date;
     Descripcion: Esta clase representa la entidad `SchedulingEntity` que se almacena en la base de datos
     en la tabla `agendamiento`. La entidad `SchedulingEntity` contiene información sobre la programación
     de eventos o citas relacionadas con un inmueble, incluyendo la fecha, hora, estado y las relaciones
-    con las entidades `InmuebleEntity`, `OwnerEntity`, `CorredorEntity`, y `UserEntity`.
+    con las entidades `PropertyEntity`, `OwnerEntity`, `CorredorEntity`, y `UserEntity`.
  */
 @Entity
 @Data
@@ -43,14 +42,14 @@ public class SchedulingEntity {
     private String state;
 
     /*
-        Descripcion: Relación muchos a uno con la entidad `InmuebleEntity`, representando que un agendamiento
+        Descripcion: Relación muchos a uno con la entidad `PropertyEntity`, representando que un agendamiento
         está asociado a un inmueble específico. La columna `inmueble_id` en la tabla `agendamiento`
-        se utiliza como clave externa para referenciar la entidad `InmuebleEntity`.
+        se utiliza como clave externa para referenciar la entidad `PropertyEntity`.
      */
     @ManyToOne
     @JoinColumn(name = "inmueble_id")
     @JsonIgnore
-    private InmuebleEntity inmueble;
+    private PropertyEntity inmueble;
 
     /*
         Descripcion: Relación muchos a uno con la entidad `OwnerEntity`, representando que un agendamiento

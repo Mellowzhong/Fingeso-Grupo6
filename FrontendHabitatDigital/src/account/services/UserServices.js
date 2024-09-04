@@ -20,6 +20,18 @@ export const register = async (user) => {
   }
 };
 
+export const registerCorredor = async (userEmail) => {
+  console.log(userEmail);
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/corredor/" + userEmail
+    );
+    return { success: true, data: response.data };
+  } catch (error) {
+    return { success: false, data: error };
+  }
+};
+
 export const login = async (user) => {
   try {
     const response = await api.post("http://localhost:8080/auth/login", user);

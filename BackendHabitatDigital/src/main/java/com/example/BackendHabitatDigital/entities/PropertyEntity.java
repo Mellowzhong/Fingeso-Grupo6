@@ -11,12 +11,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /*
-    Descripcion: Esta clase representa la entidad `InmuebleEntity` que se almacena en la base de datos
-    en la tabla `inmueble`. La entidad `InmuebleEntity` representa un inmueble con detalles específicos
+    Descripcion: Esta clase representa la entidad `PropertyEntity` que se almacena en la base de datos
+    en la tabla `inmueble`. La entidad `PropertyEntity` representa un inmueble con detalles específicos
     como disponibilidad, tipo de venta, precio, dirección, número de habitaciones y baños, entre otros.
     También define relaciones con las entidades `OwnerEntity` y `CorredorEntity`.
  */
@@ -27,19 +26,19 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "inmueble")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class InmuebleEntity {
+public class PropertyEntity {
     @Id
     @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Boolean disponibility;
+    private Boolean available;
 
-    private String sale;
+    private Boolean sale;
 
     private Integer price;
 
-    private String direction;
+    private String address;
 
     private String type;
 
